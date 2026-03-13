@@ -2,6 +2,8 @@ import './style.css';
 import Chart from 'chart.js/auto';
 import { companyData, getUniqueTeams } from './data.js';
 import { analyzeResources, INSTANCE_COST } from './optimizer.js';
+import { auth } from './firebase.js';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 // ================================================
 // STATE
@@ -541,6 +543,17 @@ function refreshAll() {
 // INITIALIZATION
 // ================================================
 function init() {
+  // ── Auth guard ────────────────────────────────────────
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = '/login.html';
+      return;
+    }
+    startDashboard();
+  });
+}
+
+function startDashboard() {
   // Apply saved theme
   applyTheme();
 
