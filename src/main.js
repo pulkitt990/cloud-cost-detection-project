@@ -40,21 +40,20 @@ function toggleTheme() {
 function getThemeColors() {
   const isDark = state.theme === 'dark';
   return {
-    text: isDark ? '#e8ecf4' : '#1a1a2e',
-    textSecondary: isDark ? '#7a84a0' : '#6b7280',
-    grid: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)',
-    accent1: '#6c5ce7',
-    accent2: isDark ? '#00cec9' : '#0984e3',
-    success: '#00b894',
-    warning: isDark ? '#fdcb6e' : '#f39c12',
-    danger: isDark ? '#ff6b6b' : '#e55039',
-    cardBg: isDark ? 'rgba(18,24,56,0.55)' : 'rgba(255,255,255,0.75)',
-    barColors: [
-      '#6c5ce7', '#a29bfe', '#00cec9', '#0984e3',
-      '#00b894', '#fdcb6e', '#e17055', '#d63031',
-    ],
-    heatmapLow: isDark ? '#0f1323' : '#e8ecf4',
-    heatmapHigh: isDark ? '#00cec9' : '#6c5ce7',
+    text: isDark ? '#eef0fa' : '#1a1a2e',
+    textSecondary: isDark ? '#7c87a8' : '#6b7280',
+    grid: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)',
+    accent1: isDark ? '#7c6ff7' : '#6c5ce7',
+    accent2: isDark ? '#00d9d4' : '#0984e3',
+    success: isDark ? '#00c9a7' : '#00b894',
+    warning: isDark ? '#fdd870' : '#f39c12',
+    danger: isDark ? '#ff7b7b' : '#e55039',
+    cardBg: isDark ? 'rgba(14, 18, 48, 0.85)' : 'rgba(255,255,255,0.75)',
+    barColors: isDark
+      ? ['#7c6ff7', '#b8b0ff', '#00d9d4', '#1a9bf0', '#00c9a7', '#fdd870', '#ff8f70', '#ff7b7b']
+      : ['#6c5ce7', '#a29bfe', '#00cec9', '#0984e3', '#00b894', '#fdcb6e', '#e17055', '#d63031'],
+    heatmapLow: isDark ? '#090c18' : '#e8ecf4',
+    heatmapHigh: isDark ? '#00d9d4' : '#6c5ce7',
   };
 }
 

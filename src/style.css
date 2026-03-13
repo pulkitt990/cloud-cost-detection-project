@@ -24,40 +24,48 @@
 
 /* ===== DARK THEME ===== */
 [data-theme="dark"] {
-  --bg-primary: #0a0e1a;
-  --bg-secondary: #0f1323;
-  --bg-card: rgba(18, 24, 56, 0.55);
-  --bg-card-solid: #141a30;
-  --bg-sidebar: #0c1020;
-  --bg-input: rgba(255, 255, 255, 0.04);
+  /* Backgrounds — true space-black with purple undertone */
+  --bg-primary:    #05070f;
+  --bg-secondary:  #090c18;
+  --bg-card:       rgba(16, 20, 50, 0.70);
+  --bg-card-solid: #0e1230;
+  --bg-sidebar:    #080b19;
+  --bg-input:      rgba(255, 255, 255, 0.05);
 
-  --border: rgba(99, 130, 255, 0.12);
-  --border-hover: rgba(99, 200, 255, 0.35);
-  --border-active: rgba(108, 92, 231, 0.6);
+  /* Borders — neon glow */
+  --border:        rgba(108, 92, 231, 0.15);
+  --border-hover:  rgba(108, 92, 231, 0.45);
+  --border-active: rgba(108, 92, 231, 0.75);
 
-  --text-primary: #e8ecf4;
-  --text-secondary: #7a84a0;
-  --text-muted: #4a5270;
+  /* Text */
+  --text-primary:   #eef0fa;
+  --text-secondary: #7c87a8;
+  --text-muted:     #424d6e;
 
-  --accent-1: #6c5ce7;
-  --accent-2: #00cec9;
-  --accent-3: #0984e3;
+  /* Accents — more vivid */
+  --accent-1: #7c6ff7;
+  --accent-2: #00d9d4;
+  --accent-3: #1a9bf0;
 
-  --gradient-1: linear-gradient(135deg, #6c5ce7, #00cec9);
-  --gradient-2: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 50%, #00cec9 100%);
-  --gradient-header: linear-gradient(135deg, #6c5ce7 0%, #0984e3 50%, #00cec9 100%);
+  /* Gradients — richer purples */
+  --gradient-1:      linear-gradient(135deg, #7c6ff7 0%, #00d9d4 100%);
+  --gradient-2:      linear-gradient(135deg, #7c6ff7 0%, #b8b0ff 50%, #00d9d4 100%);
+  --gradient-header: linear-gradient(135deg, #1a0533 0%, #2d1b69 35%, #0a2a6e 70%, #062840 100%);
 
-  --success: #00b894;
-  --warning: #fdcb6e;
-  --danger: #ff6b6b;
+  /* Status */
+  --success: #00c9a7;
+  --warning: #fdd870;
+  --danger:  #ff7b7b;
 
-  --shadow-card: 0 4px 30px rgba(0, 0, 0, 0.25);
-  --shadow-hover: 0 12px 50px rgba(108, 92, 231, 0.18);
-  --shadow-btn: 0 4px 20px rgba(108, 92, 231, 0.3);
+  /* Shadows — deeper and more colorful */
+  --shadow-card:  0 4px 40px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(108, 92, 231, 0.1) inset;
+  --shadow-hover: 0 16px 60px rgba(108, 92, 231, 0.22), 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-btn:   0 4px 24px rgba(124, 111, 247, 0.45);
 
-  --chart-grid: rgba(255, 255, 255, 0.05);
-  --chart-text: #8892a8;
-  --gauge-track: rgba(255, 255, 255, 0.06);
+  /* Charts */
+  --chart-grid:   rgba(255, 255, 255, 0.04);
+  --chart-text:   #6d7a9a;
+  --gauge-track:  rgba(255, 255, 255, 0.06);
 }
 
 /* ===== LIGHT THEME ===== */
@@ -137,7 +145,15 @@ body {
   border-radius: 10px;
 }
 
-/* ===/* ===== TOP NAVBAR ===== */
+/* ===/* ===== DARK MODE AMBIENT GLOW ===== */
+[data-theme="dark"] body {
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 0%,  rgba(108, 92, 231, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 90%, rgba(0,  217, 212, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(26,  60, 120, 0.05) 0%, transparent 70%),
+    var(--bg-primary);
+}
+
 .top-nav {
   position: fixed;
   top: 0;
