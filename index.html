@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Cloud Cost Control Platform — Intelligent Infrastructure Monitoring &amp; Optimization Dashboard" />
+  <meta name="description"
+    content="Cloud Cost Control Platform — Intelligent Infrastructure Monitoring &amp; Optimization Dashboard" />
   <title>Cloud Cost Control Platform</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
+
 <body>
 
   <!-- ===== PANEL OPEN BUTTON (top-right floating) ===== -->
   <button class="panel-open-btn" id="panelOpenBtn" aria-label="Open Admin Console">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3" />
+      <path
+        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
     </svg>
-    <span class="btn-live-dot"></span>
     <span>Admin Console</span>
   </button>
 
@@ -30,7 +37,18 @@
   <aside class="right-panel" id="rightPanel" aria-label="Admin Console Panel">
     <div class="panel-header">
       <div class="panel-brand">
-        <img src="https://img.icons8.com/isometric-folders/100/cloud.png" alt="Cloud" class="brand-icon" />
+        <div class="panel-brand-icon">
+          <svg class="cloud-icon-anim" width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6c5ce7"/>
+                <stop offset="100%" stop-color="#00cec9"/>
+              </linearGradient>
+            </defs>
+            <path d="M48 40H20C14.5 40 10 35.5 10 30C10 25 13.8 20.8 18.7 20.1C19.8 14.4 24.9 10 31 10C37.4 10 42.7 14.8 43.5 21C47.1 21.7 50 24.9 50 28.8C50 34.9 46.6 40 48 40Z" fill="url(#cloudGrad)" opacity="0.9"/>
+            <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#cloudGrad)"/>
+          </svg>
+        </div>
         <h2 class="brand-title">Admin Console</h2>
       </div>
       <button class="panel-close-btn" id="panelCloseBtn" aria-label="Close panel">✕</button>
@@ -191,4 +209,5 @@
 
   <script type="module" src="/src/main.js"></script>
 </body>
+
 </html>
