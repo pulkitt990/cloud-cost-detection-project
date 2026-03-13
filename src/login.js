@@ -7,8 +7,7 @@ import {
   updateProfile,
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
 } from 'firebase/auth';
 
 const googleProvider = new GoogleAuthProvider();
@@ -16,11 +15,6 @@ const googleProvider = new GoogleAuthProvider();
 // ── Redirect if already logged in ──────────────────────
 onAuthStateChanged(auth, (user) => {
   if (user) window.location.href = '/';
-});
-
-// ── Handle Google redirect result ──────────────────────
-getRedirectResult(auth).catch((err) => {
-  if (err?.code !== 'auth/popup-closed-by-user') console.error(err.code);
 });
 
 // ── Theme ───────────────────────────────────────────────
@@ -138,7 +132,8 @@ googleBtn?.addEventListener('click', async () => {
   hideError();
   googleBtn.disabled = true;
   try {
-    await signInWithRedirect(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
+    if (result.user) window.location.href = '/';
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') showError(friendlyError(err.code));
     googleBtn.disabled = false;

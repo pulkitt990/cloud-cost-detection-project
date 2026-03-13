@@ -1,1 +1,16 @@
-{"projectId":"prj_OMLP995jyGkFcySxBarG05bWQ43M","orgId":"team_V4Wkp52Y6EqoPEL9FJl0nADO","projectName":"cloud-cost-detection-project"}
+{
+  "projectId": "prj_OMLP995jyGkFcySxBarG05bWQ43M",
+  "orgId": "team_V4Wkp52Y6EqoPEL9FJl0nADO",
+  "projectName": "cloud-cost-detection-project",
+  "settings": {
+    "createdAt": 1773425970896,
+    "framework": "vite",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}
