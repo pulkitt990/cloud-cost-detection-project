@@ -168,6 +168,31 @@ body {
   transform: rotate(60deg);
 }
 
+/* Pulsing live dot */
+.btn-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00b894;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.btn-live-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid #00b894;
+  animation: livePulse 1.8s ease-out infinite;
+}
+
+@keyframes livePulse {
+  0%   { transform: scale(0.7); opacity: 0.8; }
+  70%  { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(0.7); opacity: 0; }
+}
+
 /* ===== BACKDROP ===== */
 .panel-backdrop {
   display: none;
