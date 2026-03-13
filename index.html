@@ -19,16 +19,38 @@
 
 <body>
 
-  <!-- ===== PANEL OPEN BUTTON (top-right floating) ===== -->
-  <button class="panel-open-btn" id="panelOpenBtn" aria-label="Open Admin Console">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="3" />
-      <path
-        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-    </svg>
-    <span>Admin Console</span>
-  </button>
+  <!-- ===== TOP NAVBAR ===== -->
+  <nav class="top-nav" id="topNav">
+    <div class="nav-brand">
+      <svg class="nav-logo" width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="navCloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6c5ce7"/>
+            <stop offset="100%" stop-color="#00cec9"/>
+          </linearGradient>
+        </defs>
+        <path d="M48 40H20C14.5 40 10 35.5 10 30C10 25 13.8 20.8 18.7 20.1C19.8 14.4 24.9 10 31 10C37.4 10 42.7 14.8 43.5 21C47.1 21.7 50 24.9 50 28.8C50 34.9 46.6 40 48 40Z" fill="url(#navCloudGrad)" opacity="0.85"/>
+        <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#navCloudGrad)"/>
+      </svg>
+      <span class="nav-brand-name">CloudSense</span>
+      <span class="nav-tagline">Infrastructure Intelligence</span>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-status">
+        <span class="nav-status-dot"></span>
+        <span class="nav-status-text">Live</span>
+      </div>
+      <button class="panel-open-btn" id="panelOpenBtn" aria-label="Open Admin Console">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span class="btn-live-dot"></span>
+        <span>Admin Console</span>
+      </button>
+    </div>
+  </nav>
 
   <!-- ===== BACKDROP ===== -->
   <div class="panel-backdrop" id="panelBackdrop"></div>
