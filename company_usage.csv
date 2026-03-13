@@ -1,0 +1,17 @@
+team,employee,cpu_usage,ram_usage,active
+Development,Development_Lead_1,80,5,True
+Development,Development_Dev_2,49,10,True
+Development,Development_Dev_3,75,15,True
+Development,Development_Dev_4,78,16,True
+Operations,Operations_Lead_1,4,5,True
+Operations,Operations_Dev_2,16,8,True
+Operations,Operations_Dev_3,26,16,True
+Operations,Operations_Dev_4,4,8,True
+Data Science,Data Science_Lead_1,45,11,True
+Data Science,Data Science_Dev_2,43,16,True
+Data Science,Data Science_Dev_3,4,7,True
+Data Science,Data Science_Dev_4,38,16,True
+R&D,R&D_Lead_1,42,11,True
+R&D,R&D_Dev_2,30,8,True
+R&D,R&D_Dev_3,73,16,True
+R&D,R&D_Dev_4,17,7,True

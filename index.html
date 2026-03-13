@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cloud Cost Control Platform — Intelligent Infrastructure Monitoring & Optimization Dashboard" />
+  <title>Cloud Cost Control Platform</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-brand">
+        <img src="https://img.icons8.com/isometric-folders/100/cloud.png" alt="Cloud" class="brand-icon" />
+        <h2 class="brand-title">Admin Console</h2>
+      </div>
+
+      <!-- Theme Toggle -->
+      <div class="theme-toggle-card" id="themeToggleCard">
+        <span class="theme-icon" id="themeIcon">🌙</span>
+        <span class="theme-label" id="themeLabel">Dark Mode</span>
+        <button class="theme-switch" id="themeSwitch" aria-label="Toggle theme">
+          <span class="theme-switch-knob" id="themeSwitchKnob"></span>
+        </button>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <h3 class="sidebar-section-title">Infrastructure Simulation</h3>
+
+      <div class="slider-container">
+        <label class="slider-label" for="instanceSlider">
+          Running Instances
+          <span class="slider-value" id="sliderValue">12</span>
+        </label>
+        <input type="range" id="instanceSlider" class="luxury-slider" min="1" max="25" value="12" />
+        <div class="slider-range-labels">
+          <span>1</span>
+          <span>25</span>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <button class="sidebar-btn reset-btn" id="resetBtn">
+        <span class="btn-icon">🔄</span>
+        Reset Environment
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="luxury-header">
+      <div class="header-bg-effect"></div>
+      <h1 class="header-title">☁️ Cloud Cost Control Platform</h1>
+      <p class="header-subtitle">
+        <span class="status-dot"></span>
+        Intelligent Infrastructure Monitoring & Optimization Dashboard
+      </p>
+    </header>
+
+    <!-- Metric Cards -->
+    <section class="metrics-grid" id="metricsGrid">
+      <div class="metric-card" data-index="0">
+        <span class="metric-label">Running Instances</span>
+        <span class="metric-value" id="metricRunning">12</span>
+        <span class="metric-delta" id="metricRunningDelta"></span>
+      </div>
+      <div class="metric-card" data-index="1">
+        <span class="metric-label">Required Instances</span>
+        <span class="metric-value" id="metricRequired">7</span>
+        <span class="metric-delta negative" id="metricRequiredDelta">↓ -5</span>
+      </div>
+      <div class="metric-card" data-index="2">
+        <span class="metric-label">Current Monthly Cost</span>
+        <span class="metric-value" id="metricCost">$60,000</span>
+        <span class="metric-delta" id="metricCostDelta"></span>
+      </div>
+      <div class="metric-card" data-index="3">
+        <span class="metric-label">Potential Savings</span>
+        <span class="metric-value" id="metricSavings">$25,000</span>
+        <span class="metric-delta positive" id="metricSavingsDelta">↑ 58.3% Efficiency</span>
+      </div>
+    </section>
+
+    <!-- Charts Row 1 -->
+    <section class="charts-row">
+      <div class="glass-card chart-card-wide">
+        <h3 class="section-title">📊 Team Resource Usage vs Allocation</h3>
+        <div class="chart-wrapper">
+          <canvas id="teamBarChart"></canvas>
+        </div>
+      </div>
+      <div class="glass-card chart-card-narrow">
+        <h3 class="section-title">💡 Optimization Impact</h3>
+        <div class="gauge-container" id="gaugeContainer">
+          <div class="gauge-ring" id="gaugeRing">
+            <svg viewBox="0 0 200 200" class="gauge-svg">
+              <circle class="gauge-bg-circle" cx="100" cy="100" r="85" />
+              <circle class="gauge-progress-circle" id="gaugeProgress" cx="100" cy="100" r="85" />
+            </svg>
+            <div class="gauge-center">
+              <span class="gauge-value" id="gaugeValue">58.3</span>
+              <span class="gauge-unit">%</span>
+              <span class="gauge-label">Efficiency</span>
+            </div>
+          </div>
+          <div class="gauge-legend">
+            <span class="gauge-legend-item"><span class="legend-dot danger"></span>0-50%</span>
+            <span class="gauge-legend-item"><span class="legend-dot warning"></span>50-80%</span>
+            <span class="gauge-legend-item"><span class="legend-dot success"></span>80-100%</span>
+          </div>
+        </div>
+        <button class="action-btn optimize-btn" id="optimizeBtn">
+          <span class="btn-icon">✨</span>
+          Auto-Optimize Infrastructure
+        </button>
+      </div>
+    </section>
+
+    <!-- Charts Row 2 -->
+    <section class="charts-row">
+      <div class="glass-card chart-card-half">
+        <h3 class="section-title">🔥 Employee Workload Heatmap</h3>
+        <div class="chart-wrapper">
+          <canvas id="heatmapChart"></canvas>
+        </div>
+      </div>
+      <div class="glass-card chart-card-half">
+        <h3 class="section-title">📈 Cost Savings Forecast</h3>
+        <div class="chart-wrapper">
+          <canvas id="forecastChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Management Panel -->
+    <section class="glass-card management-panel">
+      <h3 class="section-title">🛡️ Business Continuity & Resource Control</h3>
+
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="teams">🏢 Team Controls</button>
+          <button class="tab-btn" data-tab="employees">👥 Employee Controls</button>
+        </div>
+
+        <div class="tab-content active" id="tab-teams">
+          <div class="teams-grid" id="teamsGrid">
+            <!-- Team cards rendered by JS -->
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-employees">
+          <div class="employees-list" id="employeesList">
+            <!-- Employee rows rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      ✦ © 2026 Cloud-Cost-Detection Project • Powered by Antigravity Intelligence ✦
+    </footer>
+  </main>
+
+  <!-- Mobile Sidebar Toggle -->
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+    <span></span><span></span><span></span>
+  </button>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
