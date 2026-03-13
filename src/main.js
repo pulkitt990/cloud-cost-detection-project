@@ -10,7 +10,7 @@ const state = {
   instances: 12,
   disabledTeams: [],
   disabledEmployees: [],
-  theme: localStorage.getItem('theme') || 'dark',
+  theme: localStorage.getItem('theme') || 'light',
 };
 
 // ================================================
@@ -596,15 +596,28 @@ function init() {
     });
   }
 
-  // Mobile sidebar toggle
-  const sidebarToggle = document.getElementById('sidebarToggle');
-  const sidebar = document.getElementById('sidebar');
-  if (sidebarToggle && sidebar) {
-    sidebarToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      sidebarToggle.classList.toggle('active');
-    });
+  // Right panel open / close
+  const panelOpenBtn  = document.getElementById('panelOpenBtn');
+  const panelCloseBtn = document.getElementById('panelCloseBtn');
+  const rightPanel    = document.getElementById('rightPanel');
+  const backdrop      = document.getElementById('panelBackdrop');
+
+  function openPanel() {
+    rightPanel?.classList.add('open');
+    backdrop?.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
+
+  function closePanel() {
+    rightPanel?.classList.remove('open');
+    backdrop?.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  if (panelOpenBtn)  panelOpenBtn.addEventListener('click', openPanel);
+  if (panelCloseBtn) panelCloseBtn.addEventListener('click', closePanel);
+  if (backdrop)      backdrop.addEventListener('click', closePanel);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 
   // Tabs
   initTabs();
