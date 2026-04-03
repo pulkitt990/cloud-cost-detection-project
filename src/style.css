@@ -2061,10 +2061,12 @@ body {
   font-weight: 600;
   position: sticky;
   top: 0;
-  background: var(--bg-card-solid);
+  background: var(--header-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 10;
   border-bottom: 2px solid var(--border);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .modal-table td {
