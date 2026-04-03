@@ -97,6 +97,14 @@ function updateMetrics() {
   deltaEl.textContent = delta <= 0 ? `↓ ${delta}` : `↑ +${delta}`;
   deltaEl.className = `metric-delta ${delta <= 0 ? 'negative' : 'positive'}`;
 
+  // Sync slider visual
+  const slider = document.getElementById('instanceSlider');
+  const sliderValue = document.getElementById('sliderValue');
+  if (slider && sliderValue) {
+      slider.value = m.current_instances;
+      sliderValue.textContent = m.current_instances;
+  }
+
   document.getElementById('metricCost').textContent = `$${m.currentCost.toLocaleString()}`;
   document.getElementById('metricSavings').textContent = `$${m.savings.toLocaleString()}`;
 
@@ -568,12 +576,24 @@ function startDashboard() {
     });
   }
 
-  // Instance slider (Hidden, logic fully dynamic now)
+  // Infrastructure Simulation Slider (Restored)
   const slider = document.getElementById('instanceSlider');
+  const sliderValue = document.getElementById('sliderValue');
   if (slider) {
-    slider.parentElement.style.opacity = '0.3';
-    slider.disabled = true;
-    slider.parentElement.style.pointerEvents = 'none';
+    slider.addEventListener('input', e => {
+      const targetInstances = parseInt(e.target.value);
+      if (sliderValue) sliderValue.textContent = targetInstances;
+      
+      const numToDisable = companyData.length - targetInstances;
+      
+      // Sort instances by CPU usage (lowest first) to disable least utilized ones
+      const sortedData = [...companyData].sort((a, b) => a.cpu_usage - b.cpu_usage);
+      const instancesToDisable = sortedData.slice(0, numToDisable).map(d => d.instance_id);
+      
+      state.disabledInstances = instancesToDisable;
+      state.disabledTeams = []; // Clear team filters for accurate absolute count
+      refreshAll();
+    });
   }
 
   // Reset button
