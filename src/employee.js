@@ -75,17 +75,32 @@ function initPortal(user) {
   const selectPrompt  = document.getElementById('empSelectPrompt');
   const empContent    = document.getElementById('empContent');
 
-  // Populate profile dropdown with all employees
-  const allEmployees = companyData.map(d => d.employee).sort();
+  // Populate profile dropdown grouped by team
   profileSelect.innerHTML = '<option value="">— Select your name —</option>';
-  allEmployees.forEach(name => {
-    const opt = document.createElement('option');
-    opt.value = name;
-    opt.textContent = name;
-    profileSelect.appendChild(opt);
+  
+  const teams = [...new Set(companyData.map(d => d.team))].sort();
+  
+  teams.forEach(team => {
+    const optgroup = document.createElement('optgroup');
+    optgroup.label = team + " Team";
+    
+    const teamEmployees = companyData
+      .filter(d => d.team === team)
+      .map(d => d.employee)
+      .sort();
+      
+    teamEmployees.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      optgroup.appendChild(opt);
+    });
+    
+    profileSelect.appendChild(optgroup);
   });
 
   // Try to restore previously selected profile
+  const allEmployees = companyData.map(d => d.employee);
   const lastProfile = localStorage.getItem('emp-portal-profile');
   if (lastProfile && allEmployees.includes(lastProfile)) {
     profileSelect.value = lastProfile;
