@@ -90,30 +90,38 @@ function updateMetrics() {
   const m = computeMetrics();
 
   document.getElementById('metricRunning').textContent = m.current_instances;
-  document.getElementById('metricRequired').textContent = m.required_instances;
+  document.getElementById('metricRequired').textContent = m.instances_to_stop.length;
 
-  const delta = m.required_instances - m.current_instances;
+  const idleCount = m.instances_to_stop.length;
   const deltaEl = document.getElementById('metricRequiredDelta');
-  deltaEl.textContent = delta <= 0 ? `↓ ${delta}` : `↑ +${delta}`;
-  deltaEl.className = `metric-delta ${delta <= 0 ? 'negative' : 'positive'}`;
+  deltaEl.textContent = idleCount > 0 ? `⚠️ ${idleCount} idle detected` : '✅ All instances active';
+  deltaEl.className = `metric-delta ${idleCount > 0 ? 'negative' : 'positive'}`;
 
-  // Sync slider visual
+  // Sync slider
   const slider = document.getElementById('instanceSlider');
   const sliderValue = document.getElementById('sliderValue');
-  if (slider && sliderValue) {
-      slider.value = m.current_instances;
-      sliderValue.textContent = m.current_instances;
+  const sliderMax = document.getElementById('sliderMax');
+  const totalInstances = companyData.length;
+  if (slider) {
+    slider.max = totalInstances;
+    slider.value = m.current_instances;
   }
+  if (sliderValue) sliderValue.textContent = m.current_instances;
+  if (sliderMax) sliderMax.textContent = totalInstances;
 
   document.getElementById('metricCost').textContent = `$${m.currentCost.toLocaleString()}`;
   document.getElementById('metricSavings').textContent = `$${m.savings.toLocaleString()}`;
 
   const effEl = document.getElementById('metricSavingsDelta');
-  effEl.textContent = `↑ ${m.efficiency.toFixed(1)}% Efficiency`;
-  effEl.className = `metric-delta ${m.efficiency > 80 ? 'positive' : 'negative'}`;
+  const savingsPct = m.currentCost > 0 ? ((m.savings / m.currentCost) * 100).toFixed(1) : 0;
+  effEl.textContent = `↑ Save ${savingsPct}% with optimization`;
+  effEl.className = `metric-delta ${parseFloat(savingsPct) > 0 ? 'positive' : ''}`;
 
   // Update gauge
-  updateGauge(m.efficiency);
+  const efficiency = m.current_instances > 0
+    ? (m.required_instances / m.current_instances) * 100
+    : 0;
+  updateGauge(efficiency);
 }
 
 // ================================================
@@ -421,18 +429,25 @@ function renderTeamCards() {
   if (!grid) return;
 
   const allTeams = getUniqueTeams(companyData);
+  const filtered = getFilteredData();
+  const results = analyzeResources(filtered);
+
   grid.innerHTML = allTeams
     .map(team => {
-      const isActive = !state.disabledTeams.includes(team);
+      const isTeamActive = !state.disabledTeams.includes(team);
+      const teamInstances = companyData.filter(d => d.team === team);
+      const activeCount = teamInstances.filter(d => !state.disabledInstances.includes(d.instance_id) && !state.disabledTeams.includes(d.team)).length;
+      const teamCost = results.team_costs[team] ? `$${Math.round(results.team_costs[team]).toLocaleString()}` : '$0';
       return `
       <div class="team-card">
         <span class="team-card-name">${team}</span>
+        <div class="team-card-meta" style="font-size:0.75rem;opacity:0.7;margin:4px 0;">${activeCount} / ${teamInstances.length} instances &nbsp;·&nbsp; ${teamCost}/mo</div>
         <div class="team-status">
-          <span class="status-indicator ${isActive ? 'active' : 'stopped'}"></span>
-          ${isActive ? 'Active' : 'Stopped'}
+          <span class="status-indicator ${isTeamActive ? 'active' : 'stopped'}"></span>
+          ${isTeamActive ? 'Active' : 'Stopped'}
         </div>
-        <button class="team-toggle-btn ${isActive ? 'stop' : 'start'}" data-team="${team}">
-          ${isActive ? '⏹️ Stop Units' : '▶️ Start Units'}
+        <button class="team-toggle-btn ${isTeamActive ? 'stop' : 'start'}" data-team="${team}">
+          ${isTeamActive ? '⏹️ Stop All' : '▶️ Start All'}
         </button>
       </div>
     `;
@@ -457,21 +472,59 @@ function renderEmployeeList() {
   const container = document.getElementById('employeesList');
   if (!container) return;
 
+  // Show recommendations banner
+  const filtered = getFilteredData();
+  const results = analyzeResources(filtered);
+  const banner = document.getElementById('recommendationsBanner');
+  if (banner) {
+    const idleCount = results.instances_to_stop.length;
+    const underCount = results.instances_to_downsize.length;
+    if (idleCount > 0 || underCount > 0) {
+      banner.style.display = 'block';
+      banner.innerHTML = `
+        <span style="color:var(--warning,#f39c12);font-weight:600;">⚠️ Action Required:</span>&nbsp;
+        ${idleCount > 0 ? `<strong>${idleCount} idle instances</strong> should be stopped.` : ''}
+        ${underCount > 0 ? `<strong>${underCount} instances</strong> can be downsized.` : ''}
+        Total potential savings: <strong>$${results.savings.toLocaleString()}/mo</strong>
+      `;
+    } else {
+      banner.style.display = 'block';
+      banner.style.background = 'rgba(0,184,148,0.1)';
+      banner.style.borderColor = '#00b894';
+      banner.innerHTML = `<span style="color:#00b894;font-weight:600;">✅ All clear!</span> No idle or underutilized instances detected.`;
+    }
+  }
+
   const allTeams = getUniqueTeams(companyData);
   container.innerHTML = allTeams
     .filter(team => !state.disabledTeams.includes(team))
     .map(team => {
-      const employees = companyData.filter(d => d.team === team);
-      const rows = employees
-        .map(emp => {
-          const isActive = !state.disabledInstances.includes(emp.instance_id);
+      const instances = companyData.filter(d => d.team === team);
+      const rows = instances
+        .map(inst => {
+          const isActive = !state.disabledInstances.includes(inst.instance_id);
+          const isIdle = results.instances_to_stop.includes(inst.instance_id);
+          const isUnder = results.instances_to_downsize.includes(inst.instance_id);
+          const statusTag = !isActive ? '❌ Stopped'
+            : isIdle ? '🔴 Idle'
+            : isUnder ? '🟡 Underutilized'
+            : '🟢 Active';
+          const statusClass = !isActive ? 'idle'
+            : isIdle ? 'idle'
+            : 'active';
           return `
-          <div class="emp-row">
-            <span class="emp-name">🖥️ ${emp.instance_id.replace(/_/g, ' ')} <small style="opacity: 0.7">(${emp.instance_type}) - $${emp.monthly_cost}</small></span>
-            <span class="emp-status ${isActive ? 'active' : 'idle'}">${isActive ? '✅ Active' : '❌ Stopped'}</span>
-            <button class="emp-action-btn ${isActive ? 'suspend' : 'resume'}" data-instance="${emp.instance_id}">
-              ${isActive ? 'Stop' : 'Start'}
-            </button>
+          <div class="emp-row" style="${isIdle && isActive ? 'border-left: 3px solid var(--danger, #e55039);' : isUnder && isActive ? 'border-left: 3px solid var(--warning, #f39c12);' : ''}">
+            <div style="flex:1;min-width:0;">
+              <div class="emp-name">🖥️ ${inst.instance_id} <small style="opacity:0.7">${inst.instance_type}</small></div>
+              <div style="font-size:0.72rem;opacity:0.6;margin-top:2px;">📍 ${inst.region} &nbsp;·&nbsp; 💾 RAM ${inst.ram_usage}% &nbsp;·&nbsp; ⏱ ${inst.uptime_days}d</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+              <span style="font-size:0.75rem;font-weight:600;color:var(--accent1);">$${inst.monthly_cost}/mo</span>
+              <span class="emp-status ${statusClass}">${statusTag}</span>
+              <button class="emp-action-btn ${isActive ? 'suspend' : 'resume'}" data-instance="${inst.instance_id}">
+                ${isActive ? 'Stop' : 'Start'}
+              </button>
+            </div>
           </div>
         `;
         })
@@ -480,7 +533,7 @@ function renderEmployeeList() {
       return `
       <div class="team-group">
         <div class="team-group-header" data-team="${team}">
-          <span class="team-group-title">☁️ ${team} Instances</span>
+          <span class="team-group-title">☁️ ${team} (${instances.length} instances)</span>
           <span class="team-group-chevron">▼</span>
         </div>
         <div class="team-group-body">${rows}</div>
@@ -496,7 +549,7 @@ function renderEmployeeList() {
     });
   });
 
-  // Employee action buttons
+  // Instance action buttons
   container.querySelectorAll('.emp-action-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const emp = btn.dataset.instance;

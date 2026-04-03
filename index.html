@@ -88,13 +88,13 @@
 
       <div class="slider-container">
         <label class="slider-label" for="instanceSlider">
-          Running Instances
-          <span class="slider-value" id="sliderValue">16</span>
+          Active Instances
+          <span class="slider-value" id="sliderValue">40</span>
         </label>
-        <input type="range" id="instanceSlider" class="luxury-slider" min="1" max="16" value="16" />
+        <input type="range" id="instanceSlider" class="luxury-slider" min="1" max="40" value="40" />
         <div class="slider-range-labels">
           <span>1</span>
-          <span>16</span>
+          <span id="sliderMax">40</span>
         </div>
       </div>
 
@@ -123,24 +123,24 @@
     <!-- Metric Cards -->
     <section class="metrics-grid" id="metricsGrid">
       <div class="metric-card" data-index="0">
-        <span class="metric-label">Running Instances</span>
-        <span class="metric-value" id="metricRunning">12</span>
+        <span class="metric-label">Active Instances</span>
+        <span class="metric-value" id="metricRunning">40</span>
         <span class="metric-delta" id="metricRunningDelta"></span>
       </div>
       <div class="metric-card" data-index="1">
-        <span class="metric-label">Required Instances</span>
-        <span class="metric-value" id="metricRequired">7</span>
-        <span class="metric-delta negative" id="metricRequiredDelta">↓ -5</span>
+        <span class="metric-label">Recommended Shutdown</span>
+        <span class="metric-value" id="metricRequired">--</span>
+        <span class="metric-delta negative" id="metricRequiredDelta"></span>
       </div>
       <div class="metric-card" data-index="2">
         <span class="metric-label">Current Monthly Cost</span>
-        <span class="metric-value" id="metricCost">$60,000</span>
-        <span class="metric-delta" id="metricCostDelta"></span>
+        <span class="metric-value" id="metricCost">$--</span>
+        <span class="metric-delta" id="metricCostDelta">Across all regions</span>
       </div>
       <div class="metric-card" data-index="3">
         <span class="metric-label">Potential Savings</span>
-        <span class="metric-value" id="metricSavings">$25,000</span>
-        <span class="metric-delta positive" id="metricSavingsDelta">↑ 58.3% Efficiency</span>
+        <span class="metric-value" id="metricSavings">$--</span>
+        <span class="metric-delta positive" id="metricSavingsDelta"></span>
       </div>
     </section>
 
@@ -197,23 +197,24 @@
 
     <!-- Management Panel -->
     <section class="glass-card management-panel">
-      <h3 class="section-title">🛡️ Business Continuity &amp; Resource Control</h3>
+      <h3 class="section-title">☁️ Cloud Instance Manager</h3>
 
       <div class="tabs-container">
         <div class="tabs-header">
-          <button class="tab-btn active" data-tab="teams">🏢 Team Controls</button>
+          <button class="tab-btn active" data-tab="teams">🏢 Department View</button>
           <button class="tab-btn" data-tab="employees">🖥️ Instance Controls</button>
         </div>
 
         <div class="tab-content active" id="tab-teams">
           <div class="teams-grid" id="teamsGrid">
-            <!-- Team cards rendered by JS -->
+            <!-- Department cards rendered by JS -->
           </div>
         </div>
 
         <div class="tab-content" id="tab-employees">
+          <div id="recommendationsBanner" class="recommendations-banner" style="display:none;"></div>
           <div class="employees-list" id="employeesList">
-            <!-- Employee rows rendered by JS -->
+            <!-- Instance rows rendered by JS -->
           </div>
         </div>
       </div>
