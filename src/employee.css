@@ -1,0 +1,413 @@
+/* ============================================================
+   CloudSense Employee Portal — Dedicated Styles
+   ============================================================ */
+
+/* Body */
+.emp-portal-body {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Auth Gate ─────────────────────────────── */
+.emp-auth-gate {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  z-index: 9999;
+}
+.emp-auth-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+.spinner-ring {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border);
+  border-top-color: var(--accent-1);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Login Prompt ──────────────────────────── */
+.emp-login-prompt {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at 30% 50%, rgba(108, 92, 231, 0.15), transparent 60%),
+              radial-gradient(ellipse at 70% 60%, rgba(0, 184, 148, 0.1), transparent 55%),
+              var(--bg-primary);
+}
+.emp-login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 48px 40px;
+  text-align: center;
+  border-radius: 24px;
+}
+.emp-login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+.emp-login-card h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.emp-login-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.emp-login-error {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #e74c3c;
+}
+
+/* ── Main Portal Layout ────────────────────── */
+.emp-portal {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Topbar ────────────────────────────────── */
+.emp-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 32px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.emp-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+.emp-portal-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: white;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+}
+.emp-profile-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 200px;
+}
+.emp-profile-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.emp-profile-dropdown {
+  flex: 1;
+  max-width: 260px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.emp-profile-dropdown:focus { border-color: var(--accent-1); }
+.emp-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+.emp-theme-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+}
+.emp-theme-btn:hover { background: var(--bg-card); }
+.emp-signout-btn {
+  padding: 8px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.emp-signout-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(231,76,60,0.05);
+}
+
+/* ── Main Content ──────────────────────────── */
+.emp-main {
+  flex: 1;
+  padding: 32px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Welcome Banner ────────────────────────── */
+.emp-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-radius: 16px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.emp-welcome-text h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 4px;
+}
+.emp-welcome-text p { color: var(--text-secondary); font-size: 0.9rem; }
+.emp-status-badge {
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.badge-success { background: rgba(0,184,148,0.15); color: var(--success); border: 1px solid rgba(0,184,148,0.3); }
+.badge-warning { background: rgba(253,203,110,0.15); color: var(--warning); border: 1px solid rgba(253,203,110,0.4); }
+.badge-danger  { background: rgba(225,112,85,0.1);  color: var(--danger);  border: 1px solid rgba(225,112,85,0.3); }
+
+/* ── Select Prompt ─────────────────────────── */
+.emp-select-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+.esp-icon { font-size: 4rem; margin-bottom: 8px; opacity: 0.5; }
+.emp-select-prompt h2 { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+.emp-select-prompt p { max-width: 360px; line-height: 1.7; }
+
+/* ── Stats Row ─────────────────────────────── */
+.emp-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.emp-stat-card {
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.emp-stat-icon {
+  font-size: 1.5rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cpu-icon  { background: rgba(108, 92, 231, 0.15); }
+.ram-icon  { background: rgba(0, 217, 212, 0.12); }
+.cost-icon { background: rgba(253, 203, 110, 0.15); }
+.status-icon { background: rgba(0, 184, 148, 0.12); }
+.emp-stat-label { font-size: 0.8rem; color: var(--text-secondary); }
+.emp-stat-value { font-size: 1.5rem; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+.emp-stat-bar-wrap {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.emp-stat-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent-1);
+  transition: width 0.8s ease;
+}
+.ram-bar { background: var(--accent-2); }
+
+/* ── Detail Row ────────────────────────────── */
+.emp-detail-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .emp-detail-row { grid-template-columns: 1fr; }
+}
+
+/* Gauge card */
+.emp-gauge-card {
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.emp-gauge-wrap {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+.emp-gauge-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.emp-gauge-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.emp-gauge-note {
+  font-size: 0.8rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 1.5;
+}
+.note-success { background: rgba(0,184,148,0.1); color: var(--success); border: 1px solid rgba(0,184,148,0.2); }
+.note-warning { background: rgba(253,203,110,0.1); color: var(--warning); border: 1px solid rgba(253,203,110,0.3); }
+.note-danger  { background: rgba(225,112,85,0.1);  color: var(--danger);  border: 1px solid rgba(225,112,85,0.2); }
+
+/* Team card */
+.emp-team-card {
+  border-radius: 20px;
+  padding: 28px;
+}
+.emp-team-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.emp-team-stat {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.ets-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.ets-value {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.idle-val { color: var(--warning); }
+
+/* ── Team Members Table ────────────────────── */
+.emp-team-table-card {
+  border-radius: 20px;
+  padding: 28px;
+}
+.emp-table-wrap {
+  overflow-x: auto;
+  max-height: 400px;
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow-y: auto;
+}
+.emp-member-table { width: 100%; }
+.emp-my-row { background: rgba(108, 92, 231, 0.08); }
+.you-tag {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-left: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.badge-warning-inline { color: var(--warning); font-size: 0.85rem; }
+.badge-success-inline { color: var(--success); font-size: 0.85rem; }
+
+/* ── Footer ────────────────────────────────── */
+.emp-footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+}

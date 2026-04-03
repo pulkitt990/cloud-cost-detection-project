@@ -1,0 +1,219 @@
+import { companyData, getUniqueTeams } from './data.js';
+import { analyzeResources } from './optimizer.js';
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
+
+// ── Firebase config (same project as admin portal) ────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyChGIzwJAHnSWLQRsd4m8_mtwj903IRwmg",
+  authDomain: "cloud-cost-control-fc86e.firebaseapp.com",
+  projectId: "cloud-cost-control-fc86e",
+  storageBucket: "cloud-cost-control-fc86e.firebasestorage.app",
+  messagingSenderId: "999151125411",
+  appId: "1:999151125411:web:62dc2ff8b4822485a1d016",
+};
+
+const app = initializeApp(firebaseConfig, 'employee-portal');
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+// ── Theme ─────────────────────────────────────────────────────────────────
+const savedTheme = localStorage.getItem('cloudsense-theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+const themeBtn = document.getElementById('empThemeBtn');
+if (themeBtn) {
+  themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  themeBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('cloudsense-theme', next);
+    themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+  });
+}
+
+// ── Auth elements ──────────────────────────────────────────────────────────
+const authGate     = document.getElementById('authGate');
+const loginPrompt  = document.getElementById('loginPrompt');
+const empPortal    = document.getElementById('empPortal');
+const empGoogleBtn = document.getElementById('empGoogleBtn');
+const empSignoutBtn= document.getElementById('empSignoutBtn');
+const loginError   = document.getElementById('empLoginError');
+
+empGoogleBtn?.addEventListener('click', async () => {
+  try {
+    loginError.style.display = 'none';
+    await signInWithPopup(auth, googleProvider);
+  } catch (err) {
+    loginError.style.display = 'block';
+    loginError.textContent = `Sign-in failed: ${err.message}`;
+  }
+});
+
+empSignoutBtn?.addEventListener('click', async () => {
+  await signOut(auth);
+});
+
+// ── Auth state handler ─────────────────────────────────────────────────────
+onAuthStateChanged(auth, (user) => {
+  authGate.style.display = 'none';
+  if (!user) {
+    loginPrompt.style.display = 'flex';
+    empPortal.style.display = 'none';
+  } else {
+    loginPrompt.style.display = 'none';
+    empPortal.style.display = 'flex';
+    initPortal(user);
+  }
+});
+
+// ── Portal initialization ──────────────────────────────────────────────────
+function initPortal(user) {
+  const profileSelect = document.getElementById('profileSelect');
+  const welcomeDiv    = document.getElementById('empWelcome');
+  const selectPrompt  = document.getElementById('empSelectPrompt');
+  const empContent    = document.getElementById('empContent');
+
+  // Populate profile dropdown with all employees
+  const allEmployees = companyData.map(d => d.employee).sort();
+  profileSelect.innerHTML = '<option value="">— Select your name —</option>';
+  allEmployees.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    profileSelect.appendChild(opt);
+  });
+
+  // Try to restore previously selected profile
+  const lastProfile = localStorage.getItem('emp-portal-profile');
+  if (lastProfile && allEmployees.includes(lastProfile)) {
+    profileSelect.value = lastProfile;
+    renderProfile(lastProfile, welcomeDiv, selectPrompt, empContent);
+  }
+
+  profileSelect.addEventListener('change', () => {
+    const selected = profileSelect.value;
+    if (selected) {
+      localStorage.setItem('emp-portal-profile', selected);
+      renderProfile(selected, welcomeDiv, selectPrompt, empContent);
+    } else {
+      welcomeDiv.style.display = 'none';
+      selectPrompt.style.display = 'flex';
+      empContent.style.display = 'none';
+    }
+  });
+}
+
+// ── Render personal + team dashboard ──────────────────────────────────────
+function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
+  const emp = companyData.find(d => d.employee === employeeName);
+  if (!emp) return;
+
+  // Hide select prompt, show content
+  selectPrompt.style.display = 'none';
+  welcomeDiv.style.display = 'flex';
+  empContent.style.display = 'block';
+
+  const results = analyzeResources(companyData);
+  const isIdle  = results.instances_to_stop.includes(emp.employee);
+
+  // Welcome banner
+  const firstName = emp.employee.split(' ')[0].replace('Dr.', '').trim();
+  document.getElementById('empGreeting').textContent  = `Welcome back, ${firstName}! 👋`;
+  document.getElementById('empSubtitle').textContent  = `${emp.team} Team · ${emp.instance_type}`;
+
+  // Status badge
+  const badge = document.getElementById('empStatusBadge');
+  if (isIdle) {
+    badge.textContent  = '⚠️ Low Usage';
+    badge.className    = 'emp-status-badge badge-warning';
+  } else if (emp.cpu_usage >= 70) {
+    badge.textContent  = '🔥 High Load';
+    badge.className    = 'emp-status-badge badge-danger';
+  } else {
+    badge.textContent  = '✅ Healthy';
+    badge.className    = 'emp-status-badge badge-success';
+  }
+
+  // Stat cards
+  document.getElementById('statCpu').textContent      = `${emp.cpu_usage}%`;
+  document.getElementById('statRam').textContent      = `${emp.ram_usage}%`;
+  document.getElementById('statCost').textContent     = `$${emp.monthly_cost}/mo`;
+  document.getElementById('statInstance').textContent = emp.instance_type;
+  document.getElementById('statStatus').textContent   = isIdle ? '🟡 Low Usage' : '🟢 Active';
+
+  // Progress bars
+  const cpuBar = document.getElementById('cpuBar');
+  cpuBar.style.width = `${emp.cpu_usage}%`;
+  cpuBar.style.background = emp.cpu_usage > 80 ? 'var(--danger)' 
+    : emp.cpu_usage > 50 ? 'var(--accent-1)' 
+    : emp.cpu_usage < 15 ? 'var(--warning)' 
+    : 'var(--success)';
+
+  document.getElementById('ramBar').style.width = `${emp.ram_usage}%`;
+
+  // CPU Gauge
+  const gaugeCircle = document.getElementById('empGaugeProgress');
+  const r = 80;
+  const circumference = 2 * Math.PI * r;
+  const offset = circumference - (emp.cpu_usage / 100) * circumference;
+  gaugeCircle.style.strokeDasharray  = circumference;
+  gaugeCircle.style.strokeDashoffset = offset;
+  gaugeCircle.style.stroke = emp.cpu_usage > 80 ? '#e17055'
+    : emp.cpu_usage > 50 ? '#6c6cff'
+    : emp.cpu_usage < 15 ? '#fdcb6e'
+    : '#00b894';
+
+  document.getElementById('empGaugeValue').textContent = emp.cpu_usage;
+
+  const gaugeNote = document.getElementById('empGaugeNote');
+  if (isIdle) {
+    gaugeNote.textContent = '⚠️ Your server is running at very low CPU. Consider discussing workload redistribution with your team lead.';
+    gaugeNote.className = 'emp-gauge-note note-warning';
+  } else if (emp.cpu_usage >= 80) {
+    gaugeNote.textContent = '🔥 High CPU usage detected! Your server is under heavy load. Consider optimizing your processes.';
+    gaugeNote.className = 'emp-gauge-note note-danger';
+  } else {
+    gaugeNote.textContent = '✅ Your server is performing efficiently. Keep it up!';
+    gaugeNote.className = 'emp-gauge-note note-success';
+  }
+
+  // Team overview
+  const teamMembers = companyData.filter(d => d.team === emp.team);
+
+  document.getElementById('teamName').textContent = emp.team;
+  const teamAvg = teamMembers.reduce((s, d) => s + d.cpu_usage, 0) / teamMembers.length;
+  const teamTotalCost = teamMembers.reduce((s, d) => s + d.monthly_cost, 0);
+  const teamIdleMembers = teamMembers.filter(d => results.instances_to_stop.includes(d.employee));
+
+  // Rank by CPU descending (most active = rank 1)
+  const sorted = [...teamMembers].sort((a, b) => b.cpu_usage - a.cpu_usage);
+  const myRank  = sorted.findIndex(d => d.employee === emp.employee) + 1;
+  const topPerformer = sorted[0].employee;
+
+  document.getElementById('teamAvgCpu').textContent     = `${teamAvg.toFixed(1)}%`;
+  document.getElementById('teamCost').textContent       = `$${teamTotalCost.toLocaleString()}/mo`;
+  document.getElementById('teamActive').textContent     = `${teamMembers.length - teamIdleMembers.length} / ${teamMembers.length}`;
+  document.getElementById('teamIdle').textContent       = `${teamIdleMembers.length}`;
+  document.getElementById('teamTopPerformer').textContent = topPerformer === emp.employee ? `${topPerformer} (You!)` : topPerformer;
+  document.getElementById('teamMyRank').textContent     = `#${myRank} of ${teamMembers.length}`;
+
+  // Team members table
+  const tbody = document.getElementById('teamMembersBody');
+  tbody.innerHTML = sorted.map(m => {
+    const isMe   = m.employee === emp.employee;
+    const rowIdle= results.instances_to_stop.includes(m.employee);
+    const statusLabel = rowIdle ? '<span class="badge-warning-inline">⚠️ Low</span>' : '<span class="badge-success-inline">🟢 Active</span>';
+    return `
+      <tr class="${isMe ? 'emp-my-row' : ''}">
+        <td><strong>${m.employee}</strong>${isMe ? ' <span class="you-tag">YOU</span>' : ''}</td>
+        <td>${m.instance_type}</td>
+        <td>${m.cpu_usage}%</td>
+        <td>${m.ram_usage}%</td>
+        <td>$${m.monthly_cost}/mo</td>
+        <td>${statusLabel}</td>
+      </tr>
+    `;
+  }).join('');
+}

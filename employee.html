@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CloudSense — My Dashboard</title>
+  <meta name="description" content="Your personal cloud resource usage dashboard powered by CloudSense." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="/src/employee.css" />
+</head>
+<body class="emp-portal-body">
+
+  <!-- ===== AUTH GATE (shown while loading) ===== -->
+  <div id="authGate" class="emp-auth-gate">
+    <div class="emp-auth-spinner">
+      <div class="spinner-ring"></div>
+      <p>Authenticating…</p>
+    </div>
+  </div>
+
+  <!-- ===== LOGIN PROMPT (shown if not logged in) ===== -->
+  <div id="loginPrompt" class="emp-login-prompt" style="display:none;">
+    <div class="emp-login-card glass-card">
+      <div class="emp-login-brand">
+        <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="eg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c6ff7"/>
+              <stop offset="100%" stop-color="#00d9d4"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#eg)"/>
+        </svg>
+        <span>CloudSense</span>
+      </div>
+      <h2>Employee Portal</h2>
+      <p>Sign in with your company Google account to access your personal resource dashboard.</p>
+      <button class="google-signin-btn" id="empGoogleBtn">
+        <svg width="18" height="18" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google
+      </button>
+      <div id="empLoginError" class="emp-login-error" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN PORTAL (shown after login) ===== -->
+  <div id="empPortal" class="emp-portal" style="display:none;">
+
+    <!-- Topbar -->
+    <header class="emp-topbar">
+      <div class="emp-topbar-brand">
+        <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="tb-g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c6ff7"/>
+              <stop offset="100%" stop-color="#00d9d4"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#tb-g)"/>
+        </svg>
+        <span>CloudSense <span class="emp-portal-label">Employee</span></span>
+      </div>
+
+      <!-- Profile Selector -->
+      <div class="emp-profile-select-wrap">
+        <label for="profileSelect" class="emp-profile-label">👤 Your Profile:</label>
+        <select id="profileSelect" class="emp-profile-dropdown">
+          <option value="">— Select your name —</option>
+        </select>
+      </div>
+
+      <div class="emp-topbar-actions">
+        <button class="emp-theme-btn" id="empThemeBtn" aria-label="Toggle theme">🌙</button>
+        <button class="emp-signout-btn" id="empSignoutBtn">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- Portal Body -->
+    <main class="emp-main">
+
+      <!-- Welcome Banner -->
+      <div class="emp-welcome glass-card" id="empWelcome" style="display:none;">
+        <div class="emp-welcome-text">
+          <h1 id="empGreeting">Welcome back! 👋</h1>
+          <p id="empSubtitle">Select your name above to view your resource usage.</p>
+        </div>
+        <div class="emp-status-badge" id="empStatusBadge"></div>
+      </div>
+
+      <!-- Select Profile Prompt -->
+      <div class="emp-select-prompt" id="empSelectPrompt">
+        <div class="esp-icon">☁️</div>
+        <h2>Select Your Profile</h2>
+        <p>Use the dropdown above to choose your name and view your personal resource dashboard.</p>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div id="empContent" style="display:none;">
+
+        <!-- Row 1: Personal Stats -->
+        <section class="emp-stats-row">
+          <div class="emp-stat-card glass-card">
+            <div class="emp-stat-icon cpu-icon">⚡</div>
+            <div class="emp-stat-info">
+              <div class="emp-stat-label">CPU Usage</div>
+              <div class="emp-stat-value" id="statCpu">—</div>
+            </div>
+            <div class="emp-stat-bar-wrap">
+              <div class="emp-stat-bar" id="cpuBar"></div>
+            </div>
+          </div>
+
+          <div class="emp-stat-card glass-card">
+            <div class="emp-stat-icon ram-icon">💾</div>
+            <div class="emp-stat-info">
+              <div class="emp-stat-label">RAM Usage</div>
+              <div class="emp-stat-value" id="statRam">—</div>
+            </div>
+            <div class="emp-stat-bar-wrap">
+              <div class="emp-stat-bar ram-bar" id="ramBar"></div>
+            </div>
+          </div>
+
+          <div class="emp-stat-card glass-card">
+            <div class="emp-stat-icon cost-icon">💰</div>
+            <div class="emp-stat-info">
+              <div class="emp-stat-label">Monthly Cost</div>
+              <div class="emp-stat-value" id="statCost">—</div>
+            </div>
+            <div class="emp-stat-label" style="font-size:0.75rem;opacity:0.6;margin-top:4px;" id="statInstance">—</div>
+          </div>
+
+          <div class="emp-stat-card glass-card">
+            <div class="emp-stat-icon status-icon">🟢</div>
+            <div class="emp-stat-info">
+              <div class="emp-stat-label">Server Status</div>
+              <div class="emp-stat-value" id="statStatus">—</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Row 2: CPU Gauge + Team Panel -->
+        <section class="emp-detail-row">
+
+          <!-- Personal CPU Gauge -->
+          <div class="emp-gauge-card glass-card">
+            <h3 class="section-title">📊 Your Resource Efficiency</h3>
+            <div class="emp-gauge-wrap">
+              <svg viewBox="0 0 200 200" class="gauge-svg emp-gauge-svg">
+                <circle class="gauge-bg-circle" cx="100" cy="100" r="80" />
+                <circle class="gauge-progress-circle" id="empGaugeProgress" cx="100" cy="100" r="80" />
+              </svg>
+              <div class="emp-gauge-center">
+                <span class="gauge-value" id="empGaugeValue">0</span>
+                <span class="gauge-unit">%</span>
+                <span class="gauge-label" id="empGaugeLabel">CPU</span>
+              </div>
+            </div>
+            <div class="emp-gauge-note" id="empGaugeNote"></div>
+          </div>
+
+          <!-- Team Overview -->
+          <div class="emp-team-card glass-card">
+            <h3 class="section-title">🏢 <span id="teamName">Your Team</span> Overview</h3>
+            <div class="emp-team-stats">
+              <div class="emp-team-stat">
+                <span class="ets-label">Team Avg CPU</span>
+                <span class="ets-value" id="teamAvgCpu">—</span>
+              </div>
+              <div class="emp-team-stat">
+                <span class="ets-label">Team Monthly Cost</span>
+                <span class="ets-value" id="teamCost">—</span>
+              </div>
+              <div class="emp-team-stat">
+                <span class="ets-label">Active Members</span>
+                <span class="ets-value" id="teamActive">—</span>
+              </div>
+              <div class="emp-team-stat">
+                <span class="ets-label">Idle Members</span>
+                <span class="ets-value idle-val" id="teamIdle">—</span>
+              </div>
+              <div class="emp-team-stat">
+                <span class="ets-label">Top Performer</span>
+                <span class="ets-value" id="teamTopPerformer">—</span>
+              </div>
+              <div class="emp-team-stat">
+                <span class="ets-label">Your Rank in Team</span>
+                <span class="ets-value" id="teamMyRank">—</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Row 3: Team Members Table -->
+        <section class="glass-card emp-team-table-card">
+          <h3 class="section-title">👥 Team Members at a Glance</h3>
+          <div class="emp-table-wrap">
+            <table class="modal-table emp-member-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Instance Type</th>
+                  <th>CPU %</th>
+                  <th>RAM %</th>
+                  <th>Monthly Cost</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="teamMembersBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+      </div><!-- end #empContent -->
+
+    </main>
+
+    <footer class="emp-footer">✦ © 2026 CloudSense Employee Portal ✦</footer>
+  </div><!-- end #empPortal -->
+
+  <script type="module" src="/src/employee.js"></script>
+</body>
+</html>

@@ -7,8 +7,9 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main:  resolve(__dirname, 'index.html'),
-        login: resolve(__dirname, 'login.html'),
+        main:     resolve(__dirname, 'index.html'),
+        login:    resolve(__dirname, 'login.html'),
+        employee: resolve(__dirname, 'employee.html'),
       },
     },
   },
