@@ -256,12 +256,12 @@ function renderHeatmapChart() {
   }
 
   const teams = getUniqueTeams(filtered);
-  const employees = [...new Set(filtered.map(d => d.instance_id))];
+  const employees = [...new Set(filtered.map(d => d.employee))];
 
   // Build matrix-like data as grouped bars (simulated heatmap)
   const datasets = teams.map((team, ti) => {
     const data = employees.map(emp => {
-      const match = filtered.find(d => d.instance_id === emp && d.team === team);
+      const match = filtered.find(d => d.employee === emp && d.team === team);
       return match ? match.cpu_usage : 0;
     });
     return {
