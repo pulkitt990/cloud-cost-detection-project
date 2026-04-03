@@ -1940,3 +1940,139 @@ body {
 }
 
 
+
+
+/* ── Metric Card Modals ───────────────────────────── */
+.metric-card.clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.metric-card.clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--shadow);
+  border-color: var(--accent1);
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  z-index: 99998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -46%) scale(0.95);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.3);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.open {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: all;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-close {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 32px; height: 32px;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+
+.modal-close:hover { 
+  color: #fff;
+  background: #e55039;
+  border-color: #e55039;
+}
+
+.modal-body {
+  overflow-y: auto;
+  padding-right: 12px; /* For scrollbar */
+}
+
+/* Custom Scrollbar for Modal */
+.modal-body::-webkit-scrollbar { width: 6px; }
+.modal-body::-webkit-scrollbar-track { background: transparent; }
+.modal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+.modal-body::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+.modal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.modal-table th {
+  text-align: left;
+  padding: 12px;
+  color: var(--text-primary);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  background: var(--card-bg);
+  z-index: 10;
+  border-bottom: 2px solid var(--border);
+}
+
+.modal-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.modal-table tr:hover td {
+  background: rgba(124, 111, 247, 0.05);
+}
+
+.modal-table-icon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
