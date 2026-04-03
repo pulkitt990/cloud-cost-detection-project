@@ -147,7 +147,7 @@ function showPinPrompt(employeeName, welcomeDiv, selectPrompt, empContent) {
 
 document.getElementById('pinSubmit')?.addEventListener('click', () => {
   if (!currentAuthEmp) return;
-  const inputVal = document.getElementById('pinInput').value;
+  const inputVal = document.getElementById('pinInput').value.trim().toLowerCase();
   
   if (inputVal === currentAuthEmp.pin) {
     // Unlock successful
@@ -171,6 +171,26 @@ document.getElementById('pinInput')?.addEventListener('keyup', (e) => {
     document.getElementById('pinSubmit').click();
   }
 });
+
+// Password visibility toggle
+const pinToggleBtn = document.getElementById('pinToggleBtn');
+const pinInput = document.getElementById('pinInput');
+const eyeShow = document.getElementById('eyeIconShow');
+const eyeHide = document.getElementById('eyeIconHide');
+
+if (pinToggleBtn && pinInput) {
+  pinToggleBtn.addEventListener('click', () => {
+    if (pinInput.type === 'password') {
+      pinInput.type = 'text';
+      eyeShow.style.display = 'none';
+      eyeHide.style.display = 'block';
+    } else {
+      pinInput.type = 'password';
+      eyeShow.style.display = 'block';
+      eyeHide.style.display = 'none';
+    }
+  });
+}
 
 // ── Render personal + team dashboard ──────────────────────────────────────
 function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
