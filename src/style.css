@@ -2057,7 +2057,9 @@ body {
   font-weight: 600;
   position: sticky;
   top: 0;
-  background: var(--bg-card-solid);
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 10;
   border-bottom: 2px solid var(--border);
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
