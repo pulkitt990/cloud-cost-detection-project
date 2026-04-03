@@ -484,15 +484,15 @@ function renderEmployeeList() {
   const filtered = getFilteredData();
   const results = analyzeResources(filtered);
 
-  // Simple recommendations banner
   const banner = document.getElementById('recommendationsBanner');
   if (banner) {
     const idleCount = results.instances_to_stop.length;
+    const savingsAmount = results.current_cost - results.optimized_cost;
     if (idleCount > 0) {
       banner.style.display = 'block';
       banner.style.background = 'rgba(243, 156, 18, 0.1)';
       banner.style.borderColor = 'rgba(243,156,18,0.4)';
-      banner.innerHTML = `⚠️ <strong>${idleCount} employees</strong> are using very low CPU (&lt;15%). Consider suspending to save <strong>$${results.savings.toLocaleString()}/mo</strong>.`;
+      banner.innerHTML = `⚠️ <strong>${idleCount} employees</strong> are using very low CPU (&lt;15%). Consider suspending to save <strong>$${savingsAmount.toLocaleString()}/mo</strong>.`;
     } else {
       banner.style.display = 'block';
       banner.style.background = 'rgba(0,184,148,0.1)';
@@ -710,6 +710,36 @@ function startDashboard() {
       state.disabledInstances = newDisabled;
       refreshAll();
       showToast(`Automatically stopped ${m.instances_to_stop.length} idle instances!`);
+    });
+  }
+
+  // Export Executive Report Logic
+  const exportReportBtn = document.getElementById('exportReportBtn');
+  if (exportReportBtn) {
+    exportReportBtn.addEventListener('click', () => {
+      const activeData = getFilteredData();
+      if (activeData.length === 0) {
+        return showToast('No active data to export!');
+      }
+      
+      const csvRows = ['Team,Employee,Instance Type,Monthly Cost,CPU %,RAM %'];
+      activeData.forEach(d => {
+        csvRows.push(`${d.team},${d.employee},${d.instance_type},$${d.monthly_cost},${d.cpu_usage}%,${d.ram_usage}%`);
+      });
+      
+      const csvStr = csvRows.join('\\n');
+      const blob = new Blob([csvStr], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `CloudSense_Executive_Report_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showToast('Executive Report Downloaded Successfully!');
     });
   }
 
