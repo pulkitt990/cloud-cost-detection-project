@@ -65,14 +65,14 @@ export function analyzeResources(data) {
   // Generate human-readable recommendations
   const recommendations = [
     ...idleInstances.map(d => ({
-      instance_id: d.instance_id,
+      employee: d.employee,
       type: 'IDLE',
-      action: 'Stop',
+      action: 'Suspend',
       savings: d.monthly_cost,
-      reason: `CPU only ${d.cpu_usage}% — idle for ${d.uptime_days} days`,
+      reason: `CPU only ${d.cpu_usage}% — idle resource`,
     })),
     ...underutilizedInstances.map(d => ({
-      instance_id: d.instance_id,
+      employee: d.employee,
       type: 'UNDERUTILIZED',
       action: `Downsize to ${DOWNSIZE_MAP[d.instance_type] || 'smaller type'}`,
       savings: DOWNSIZE_SAVINGS[d.instance_type] || 0,
@@ -87,8 +87,8 @@ export function analyzeResources(data) {
     optimized_cost: optimizedCost,
     avg_cpu: Math.round(avgCpu * 10) / 10,
     team_costs: teamCosts,
-    instances_to_stop: idleInstances.map(d => d.instance_id),
-    instances_to_downsize: underutilizedInstances.map(d => d.instance_id),
+    instances_to_stop: idleInstances.map(d => d.employee),
+    instances_to_downsize: underutilizedInstances.map(d => d.employee),
     recommendations,
   };
 }
