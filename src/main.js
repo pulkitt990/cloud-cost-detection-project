@@ -1,9 +1,12 @@
 import './style.css';
 import Chart from 'chart.js/auto';
-import { companyData, getUniqueTeams } from './data.js';
+import { companyData as _defaultData, getUniqueTeams, parseCSV } from './data.js';
 import { analyzeResources } from './optimizer.js';
 import { auth } from './firebase.js';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+
+// Live mutable reference to companyData (can be replaced by CSV upload)
+let companyData = [..._defaultData];
 
 // ================================================
 // STATE
@@ -65,7 +68,7 @@ function getFilteredData() {
   return companyData.filter(
     d =>
       !state.disabledTeams.includes(d.team) &&
-      !state.disabledInstances.includes(d.instance_id)
+      !state.disabledInstances.includes(d.employee)
   );
 }
 
@@ -435,13 +438,20 @@ function renderTeamCards() {
   grid.innerHTML = allTeams
     .map(team => {
       const isTeamActive = !state.disabledTeams.includes(team);
-      const teamInstances = companyData.filter(d => d.team === team);
-      const activeCount = teamInstances.filter(d => !state.disabledInstances.includes(d.instance_id) && !state.disabledTeams.includes(d.team)).length;
-      const teamCost = results.team_costs[team] ? `$${Math.round(results.team_costs[team]).toLocaleString()}` : '$0';
+      const teamEmps = companyData.filter(d => d.team === team);
+      const activeCount = teamEmps.filter(d =>
+        !state.disabledInstances.includes(d.employee) &&
+        !state.disabledTeams.includes(d.team)
+      ).length;
+      const teamCost = results.team_costs[team]
+        ? `$${Math.round(results.team_costs[team]).toLocaleString()}`
+        : '$0';
       return `
       <div class="team-card">
         <span class="team-card-name">${team}</span>
-        <div class="team-card-meta" style="font-size:0.75rem;opacity:0.7;margin:4px 0;">${activeCount} / ${teamInstances.length} instances &nbsp;·&nbsp; ${teamCost}/mo</div>
+        <div class="team-card-meta" style="font-size:0.75rem;opacity:0.7;margin:4px 0;">
+          ${activeCount}/${teamEmps.length} active &nbsp;·&nbsp; ${teamCost}/mo
+        </div>
         <div class="team-status">
           <span class="status-indicator ${isTeamActive ? 'active' : 'stopped'}"></span>
           ${isTeamActive ? 'Active' : 'Stopped'}
@@ -454,7 +464,6 @@ function renderTeamCards() {
     })
     .join('');
 
-  // Attach events
   grid.querySelectorAll('.team-toggle-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const team = btn.dataset.team;
@@ -472,87 +481,74 @@ function renderEmployeeList() {
   const container = document.getElementById('employeesList');
   if (!container) return;
 
-  // Show recommendations banner
   const filtered = getFilteredData();
   const results = analyzeResources(filtered);
+
+  // Simple recommendations banner
   const banner = document.getElementById('recommendationsBanner');
   if (banner) {
     const idleCount = results.instances_to_stop.length;
-    const underCount = results.instances_to_downsize.length;
-    if (idleCount > 0 || underCount > 0) {
+    if (idleCount > 0) {
       banner.style.display = 'block';
-      banner.innerHTML = `
-        <span style="color:var(--warning,#f39c12);font-weight:600;">⚠️ Action Required:</span>&nbsp;
-        ${idleCount > 0 ? `<strong>${idleCount} idle instances</strong> should be stopped.` : ''}
-        ${underCount > 0 ? `<strong>${underCount} instances</strong> can be downsized.` : ''}
-        Total potential savings: <strong>$${results.savings.toLocaleString()}/mo</strong>
-      `;
+      banner.style.background = 'rgba(243, 156, 18, 0.1)';
+      banner.style.borderColor = 'rgba(243,156,18,0.4)';
+      banner.innerHTML = `⚠️ <strong>${idleCount} employees</strong> are using very low CPU (&lt;15%). Consider suspending to save <strong>$${results.savings.toLocaleString()}/mo</strong>.`;
     } else {
       banner.style.display = 'block';
       banner.style.background = 'rgba(0,184,148,0.1)';
       banner.style.borderColor = '#00b894';
-      banner.innerHTML = `<span style="color:#00b894;font-weight:600;">✅ All clear!</span> No idle or underutilized instances detected.`;
+      banner.innerHTML = `✅ All employees are utilizing their resources well.`;
     }
   }
 
   const allTeams = getUniqueTeams(companyData);
+
   container.innerHTML = allTeams
     .filter(team => !state.disabledTeams.includes(team))
     .map(team => {
-      const instances = companyData.filter(d => d.team === team);
-      const rows = instances
-        .map(inst => {
-          const isActive = !state.disabledInstances.includes(inst.instance_id);
-          const isIdle = results.instances_to_stop.includes(inst.instance_id);
-          const isUnder = results.instances_to_downsize.includes(inst.instance_id);
-          const statusTag = !isActive ? '❌ Stopped'
-            : isIdle ? '🔴 Idle'
-            : isUnder ? '🟡 Underutilized'
-            : '🟢 Active';
-          const statusClass = !isActive ? 'idle'
-            : isIdle ? 'idle'
-            : 'active';
-          return `
-          <div class="emp-row" style="${isIdle && isActive ? 'border-left: 3px solid var(--danger, #e55039);' : isUnder && isActive ? 'border-left: 3px solid var(--warning, #f39c12);' : ''}">
-            <div style="flex:1;min-width:0;">
-              <div class="emp-name">🖥️ ${inst.instance_id} <small style="opacity:0.7">${inst.instance_type}</small></div>
-              <div style="font-size:0.72rem;opacity:0.6;margin-top:2px;">📍 ${inst.region} &nbsp;·&nbsp; 💾 RAM ${inst.ram_usage}% &nbsp;·&nbsp; ⏱ ${inst.uptime_days}d</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-              <span style="font-size:0.75rem;font-weight:600;color:var(--accent1);">$${inst.monthly_cost}/mo</span>
-              <span class="emp-status ${statusClass}">${statusTag}</span>
-              <button class="emp-action-btn ${isActive ? 'suspend' : 'resume'}" data-instance="${inst.instance_id}">
-                ${isActive ? 'Stop' : 'Start'}
-              </button>
-            </div>
+      const employees = companyData.filter(d => d.team === team);
+      const rows = employees.map(emp => {
+        const isActive = !state.disabledInstances.includes(emp.employee);
+        const isIdle = results.instances_to_stop.includes(emp.employee);
+        const statusLabel = !isActive ? '❌ Suspended'
+          : isIdle ? '🟡 Low Usage'
+          : '🟢 Active';
+        const statusClass = isActive ? 'active' : 'idle';
+
+        return `
+          <div class="emp-row">
+            <span class="emp-name">👤 ${emp.employee}</span>
+            <span class="emp-meta">${emp.instance_type} &middot; $${emp.monthly_cost}/mo</span>
+            <span class="emp-cpu">CPU: ${emp.cpu_usage}%</span>
+            <span class="emp-status ${statusClass}">${statusLabel}</span>
+            <button class="emp-action-btn ${isActive ? 'suspend' : 'resume'}" data-employee="${emp.employee}">
+              ${isActive ? 'Suspend' : 'Resume'}
+            </button>
           </div>
         `;
-        })
-        .join('');
+      }).join('');
 
       return `
-      <div class="team-group">
-        <div class="team-group-header" data-team="${team}">
-          <span class="team-group-title">☁️ ${team} (${instances.length} instances)</span>
-          <span class="team-group-chevron">▼</span>
+        <div class="team-group">
+          <div class="team-group-header">
+            <span class="team-group-title">🏢 ${team} (${employees.length})</span>
+            <span class="team-group-chevron">▼</span>
+          </div>
+          <div class="team-group-body">${rows}</div>
         </div>
-        <div class="team-group-body">${rows}</div>
-      </div>
-    `;
+      `;
     })
     .join('');
 
-  // Expander toggle
-  container.querySelectorAll('.team-group-header').forEach(header => {
-    header.addEventListener('click', () => {
-      header.parentElement.classList.toggle('open');
-    });
+  // Expander
+  container.querySelectorAll('.team-group-header').forEach(h => {
+    h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
   });
 
-  // Instance action buttons
+  // Suspend/Resume buttons
   container.querySelectorAll('.emp-action-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const emp = btn.dataset.instance;
+      const emp = btn.dataset.employee;
       if (state.disabledInstances.includes(emp)) {
         state.disabledInstances = state.disabledInstances.filter(e => e !== emp);
       } else {
@@ -641,10 +637,10 @@ function startDashboard() {
       
       // Sort instances by CPU usage (lowest first) to disable least utilized ones
       const sortedData = [...companyData].sort((a, b) => a.cpu_usage - b.cpu_usage);
-      const instancesToDisable = sortedData.slice(0, numToDisable).map(d => d.instance_id);
+      const instancesToDisable = sortedData.slice(0, numToDisable).map(d => d.employee);
       
       state.disabledInstances = instancesToDisable;
-      state.disabledTeams = []; // Clear team filters for accurate absolute count
+      state.disabledTeams = [];
       refreshAll();
     });
   }
@@ -655,8 +651,48 @@ function startDashboard() {
     resetBtn.addEventListener('click', () => {
       state.disabledTeams = [];
       state.disabledInstances = [];
+      companyData = [..._defaultData];
       refreshAll();
       showToast('Environment reset to defaults!');
+    });
+  }
+
+  // CSV Upload
+  const csvInput = document.getElementById('csvFileInput');
+  const csvStatus = document.getElementById('csvStatus');
+  if (csvInput) {
+    csvInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const parsed = parseCSV(ev.target.result);
+          if (parsed.length === 0) throw new Error('No valid rows found.');
+          companyData = parsed;
+          state.disabledTeams = [];
+          state.disabledInstances = [];
+          // Update slider max
+          const slider = document.getElementById('instanceSlider');
+          const sliderMax = document.getElementById('sliderMax');
+          if (slider) { slider.max = companyData.length; slider.value = companyData.length; }
+          if (sliderMax) sliderMax.textContent = companyData.length;
+          refreshAll();
+          if (csvStatus) {
+            csvStatus.style.display = 'block';
+            csvStatus.style.color = '#00b894';
+            csvStatus.textContent = `✅ Loaded ${parsed.length} employees from ${file.name}`;
+          }
+          showToast(`Real data loaded: ${parsed.length} employees from ${file.name}`);
+        } catch (err) {
+          if (csvStatus) {
+            csvStatus.style.display = 'block';
+            csvStatus.style.color = '#e55039';
+            csvStatus.textContent = `❌ Error: ${err.message}`;
+          }
+        }
+      };
+      reader.readAsText(file);
     });
   }
 

@@ -104,6 +104,21 @@
         <span class="btn-icon">🔄</span>
         Reset Environment
       </button>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="csv-upload-section">
+        <div class="csv-title">📂 Upload Your Real Data</div>
+        <p class="csv-desc">Upload a CSV with your team's actual resource usage to replace the default data.</p>
+        <label class="csv-upload-label" for="csvFileInput">
+          <span class="btn-icon">⬆️</span> Upload CSV File
+          <input type="file" id="csvFileInput" accept=".csv" hidden />
+        </label>
+        <a href="/employee_data_template.csv" download class="csv-template-link">
+          ⬇️ Download template CSV
+        </a>
+        <div id="csvStatus" class="csv-status" style="display:none;"></div>
+      </div>
     </div>
   </aside>
 
@@ -197,24 +212,24 @@
 
     <!-- Management Panel -->
     <section class="glass-card management-panel">
-      <h3 class="section-title">☁️ Cloud Instance Manager</h3>
+      <h3 class="section-title">🛡️ Resource Control Center</h3>
 
       <div class="tabs-container">
         <div class="tabs-header">
-          <button class="tab-btn active" data-tab="teams">🏢 Department View</button>
-          <button class="tab-btn" data-tab="employees">🖥️ Instance Controls</button>
+          <button class="tab-btn active" data-tab="teams">🏢 Team View</button>
+          <button class="tab-btn" data-tab="employees">👥 Employee Controls</button>
         </div>
 
         <div class="tab-content active" id="tab-teams">
           <div class="teams-grid" id="teamsGrid">
-            <!-- Department cards rendered by JS -->
+            <!-- Team cards rendered by JS -->
           </div>
         </div>
 
         <div class="tab-content" id="tab-employees">
           <div id="recommendationsBanner" class="recommendations-banner" style="display:none;"></div>
           <div class="employees-list" id="employeesList">
-            <!-- Instance rows rendered by JS -->
+            <!-- Employee rows rendered by JS -->
           </div>
         </div>
       </div>

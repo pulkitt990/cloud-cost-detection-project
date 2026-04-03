@@ -1,68 +1,86 @@
 /**
- * Cloud Infrastructure Dataset — CloudSense
- * Based on real AWS EC2 on-demand pricing (us-east-1, Linux)
- * Includes 40 instances across 5 departments
+ * CloudSense — Employee Resource Usage Data
  *
- * Instance types and monthly costs (approximate real AWS pricing):
- *   t3.micro    → $7    | t3.small   → $15   | t3.medium  → $30
- *   t3.large    → $60   | t3.xlarge  → $120  |
- *   m5.large    → $69   | m5.xlarge  → $138  | m5.2xlarge → $277
- *   c5.large    → $61   | c5.xlarge  → $122  | c5.2xlarge → $245
- *   r5.large    → $91   | r5.xlarge  → $182  |
- *   g4dn.xlarge → $379  | p3.2xlarge → $2203 |
+ * Default dataset uses realistic cloud cost data per employee/role.
+ * You can replace this entirely by uploading your own CSV file.
+ *
+ * Required CSV columns:
+ *   team, employee, instance_type, monthly_cost, cpu_usage, ram_usage
+ *
+ * Example:
+ *   Development,Alice Johnson,t3.large,60,78,55
+ *   Operations,Bob Singh,t3.micro,7,4,8
  */
-export const companyData = [
-  // ── Development (10 instances) ────────────────────────────────────────────
-  { team: "Development",  instance_id: "i-dev-001", instance_type: "c5.xlarge",   region: "us-east-1", monthly_cost: 122,  cpu_usage: 78, ram_usage: 62, uptime_days: 30 },
-  { team: "Development",  instance_id: "i-dev-002", instance_type: "t3.large",    region: "us-east-1", monthly_cost: 60,   cpu_usage: 65, ram_usage: 55, uptime_days: 30 },
-  { team: "Development",  instance_id: "i-dev-003", instance_type: "m5.xlarge",   region: "us-east-1", monthly_cost: 138,  cpu_usage: 72, ram_usage: 68, uptime_days: 30 },
-  { team: "Development",  instance_id: "i-dev-004", instance_type: "t3.medium",   region: "us-east-1", monthly_cost: 30,   cpu_usage: 45, ram_usage: 40, uptime_days: 30 },
-  { team: "Development",  instance_id: "i-dev-005", instance_type: "c5.2xlarge",  region: "us-west-2", monthly_cost: 245,  cpu_usage: 83, ram_usage: 71, uptime_days: 30 },
-  { team: "Development",  instance_id: "i-dev-006", instance_type: "t3.large",    region: "us-west-2", monthly_cost: 60,   cpu_usage: 9,  ram_usage: 12, uptime_days: 45 },  // IDLE
-  { team: "Development",  instance_id: "i-dev-007", instance_type: "m5.large",    region: "us-east-1", monthly_cost: 69,   cpu_usage: 55, ram_usage: 48, uptime_days: 30 },
-  { team: "Development",  instance_id: "i-dev-008", instance_type: "t3.small",    region: "ap-south-1",monthly_cost: 15,   cpu_usage: 25, ram_usage: 22, uptime_days: 30 },
-  { team: "Development",  instance_id: "i-dev-009", instance_type: "t3.medium",   region: "eu-west-1", monthly_cost: 30,   cpu_usage: 11, ram_usage: 14, uptime_days: 60 },  // IDLE
-  { team: "Development",  instance_id: "i-dev-010", instance_type: "c5.xlarge",   region: "us-east-1", monthly_cost: 122,  cpu_usage: 67, ram_usage: 59, uptime_days: 30 },
 
-  // ── Operations (8 instances) ──────────────────────────────────────────────
-  { team: "Operations",   instance_id: "i-ops-001", instance_type: "m5.2xlarge",  region: "us-east-1", monthly_cost: 277,  cpu_usage: 41, ram_usage: 70, uptime_days: 30 },
-  { team: "Operations",   instance_id: "i-ops-002", instance_type: "t3.xlarge",   region: "us-east-1", monthly_cost: 120,  cpu_usage: 6,  ram_usage: 10, uptime_days: 90 },  // IDLE
-  { team: "Operations",   instance_id: "i-ops-003", instance_type: "c5.large",    region: "us-east-1", monthly_cost: 61,   cpu_usage: 34, ram_usage: 31, uptime_days: 30 },
-  { team: "Operations",   instance_id: "i-ops-004", instance_type: "t3.micro",    region: "us-east-1", monthly_cost: 7,    cpu_usage: 3,  ram_usage: 8,  uptime_days: 120 }, // IDLE
-  { team: "Operations",   instance_id: "i-ops-005", instance_type: "m5.large",    region: "us-west-2", monthly_cost: 69,   cpu_usage: 29, ram_usage: 42, uptime_days: 30 },
-  { team: "Operations",   instance_id: "i-ops-006", instance_type: "t3.medium",   region: "eu-west-1", monthly_cost: 30,   cpu_usage: 19, ram_usage: 25, uptime_days: 30 },
-  { team: "Operations",   instance_id: "i-ops-007", instance_type: "r5.large",    region: "us-east-1", monthly_cost: 91,   cpu_usage: 48, ram_usage: 75, uptime_days: 30 },
-  { team: "Operations",   instance_id: "i-ops-008", instance_type: "t3.large",    region: "ap-south-1",monthly_cost: 60,   cpu_usage: 7,  ram_usage: 11, uptime_days: 75 },  // IDLE
+export let companyData = [
+  // Development Team
+  { team: "Development", employee: "Alice Johnson",    instance_type: "c5.xlarge",  monthly_cost: 122, cpu_usage: 78, ram_usage: 62 },
+  { team: "Development", employee: "Ravi Sharma",      instance_type: "t3.large",   monthly_cost: 60,  cpu_usage: 65, ram_usage: 55 },
+  { team: "Development", employee: "Priya Mehta",      instance_type: "m5.xlarge",  monthly_cost: 138, cpu_usage: 72, ram_usage: 68 },
+  { team: "Development", employee: "James Carter",     instance_type: "t3.medium",  monthly_cost: 30,  cpu_usage: 45, ram_usage: 40 },
+  { team: "Development", employee: "Neha Gupta",       instance_type: "c5.2xlarge", monthly_cost: 245, cpu_usage: 83, ram_usage: 71 },
+  { team: "Development", employee: "Arjun Patel",      instance_type: "t3.large",   monthly_cost: 60,  cpu_usage:  9, ram_usage: 12 }, // idle
+  { team: "Development", employee: "Sara Williams",    instance_type: "m5.large",   monthly_cost: 69,  cpu_usage: 55, ram_usage: 48 },
+  { team: "Development", employee: "Karan Verma",      instance_type: "t3.medium",  monthly_cost: 30,  cpu_usage: 11, ram_usage: 14 }, // idle
 
-  // ── Data Science (8 instances) ────────────────────────────────────────────
-  { team: "Data Science", instance_id: "i-ds-001",  instance_type: "p3.2xlarge",  region: "us-east-1", monthly_cost: 2203, cpu_usage: 88, ram_usage: 91, uptime_days: 14 },
-  { team: "Data Science", instance_id: "i-ds-002",  instance_type: "g4dn.xlarge", region: "us-east-1", monthly_cost: 379,  cpu_usage: 74, ram_usage: 80, uptime_days: 21 },
-  { team: "Data Science", instance_id: "i-ds-003",  instance_type: "m5.2xlarge",  region: "us-east-1", monthly_cost: 277,  cpu_usage: 55, ram_usage: 65, uptime_days: 30 },
-  { team: "Data Science", instance_id: "i-ds-004",  instance_type: "r5.xlarge",   region: "us-west-2", monthly_cost: 182,  cpu_usage: 62, ram_usage: 82, uptime_days: 30 },
-  { team: "Data Science", instance_id: "i-ds-005",  instance_type: "c5.2xlarge",  region: "us-east-1", monthly_cost: 245,  cpu_usage: 5,  ram_usage: 9,  uptime_days: 55 },  // IDLE
-  { team: "Data Science", instance_id: "i-ds-006",  instance_type: "m5.xlarge",   region: "eu-west-1", monthly_cost: 138,  cpu_usage: 43, ram_usage: 55, uptime_days: 30 },
-  { team: "Data Science", instance_id: "i-ds-007",  instance_type: "t3.xlarge",   region: "us-east-1", monthly_cost: 120,  cpu_usage: 31, ram_usage: 38, uptime_days: 30 },
-  { team: "Data Science", instance_id: "i-ds-008",  instance_type: "g4dn.xlarge", region: "us-west-2", monthly_cost: 379,  cpu_usage: 4,  ram_usage: 7,  uptime_days: 45 },  // IDLE (forgotten GPU node)
+  // Operations Team
+  { team: "Operations",  employee: "David Kim",        instance_type: "m5.2xlarge", monthly_cost: 277, cpu_usage: 41, ram_usage: 70 },
+  { team: "Operations",  employee: "Anita Rao",        instance_type: "t3.xlarge",  monthly_cost: 120, cpu_usage:  6, ram_usage: 10 }, // idle
+  { team: "Operations",  employee: "Michael Chen",     instance_type: "c5.large",   monthly_cost: 61,  cpu_usage: 34, ram_usage: 31 },
+  { team: "Operations",  employee: "Sunita Nair",      instance_type: "t3.micro",   monthly_cost: 7,   cpu_usage:  3, ram_usage:  8 }, // idle
+  { team: "Operations",  employee: "Vijay Kumar",      instance_type: "m5.large",   monthly_cost: 69,  cpu_usage: 29, ram_usage: 42 },
+  { team: "Operations",  employee: "Emily Davis",      instance_type: "r5.large",   monthly_cost: 91,  cpu_usage: 48, ram_usage: 75 },
 
-  // ── R&D (8 instances) ────────────────────────────────────────────────────
-  { team: "R&D",          instance_id: "i-rd-001",  instance_type: "m5.xlarge",   region: "us-east-1", monthly_cost: 138,  cpu_usage: 58, ram_usage: 52, uptime_days: 30 },
-  { team: "R&D",          instance_id: "i-rd-002",  instance_type: "c5.xlarge",   region: "us-east-1", monthly_cost: 122,  cpu_usage: 70, ram_usage: 45, uptime_days: 30 },
-  { team: "R&D",          instance_id: "i-rd-003",  instance_type: "t3.large",    region: "eu-west-1", monthly_cost: 60,   cpu_usage: 8,  ram_usage: 13, uptime_days: 88 },  // IDLE
-  { team: "R&D",          instance_id: "i-rd-004",  instance_type: "r5.large",    region: "us-east-1", monthly_cost: 91,   cpu_usage: 38, ram_usage: 67, uptime_days: 30 },
-  { team: "R&D",          instance_id: "i-rd-005",  instance_type: "m5.large",    region: "ap-south-1",monthly_cost: 69,   cpu_usage: 26, ram_usage: 33, uptime_days: 30 },
-  { team: "R&D",          instance_id: "i-rd-006",  instance_type: "c5.large",    region: "us-west-2", monthly_cost: 61,   cpu_usage: 49, ram_usage: 40, uptime_days: 30 },
-  { team: "R&D",          instance_id: "i-rd-007",  instance_type: "t3.medium",   region: "us-east-1", monthly_cost: 30,   cpu_usage: 12, ram_usage: 18, uptime_days: 95 },  // IDLE
-  { team: "R&D",          instance_id: "i-rd-008",  instance_type: "m5.2xlarge",  region: "us-east-1", monthly_cost: 277,  cpu_usage: 77, ram_usage: 73, uptime_days: 30 },
+  // Data Science Team
+  { team: "Data Science",employee: "Dr. Arun Iyer",   instance_type: "p3.2xlarge", monthly_cost: 2203, cpu_usage: 88, ram_usage: 91 },
+  { team: "Data Science",employee: "Meera Pillai",    instance_type: "g4dn.xlarge",monthly_cost: 379, cpu_usage: 74, ram_usage: 80 },
+  { team: "Data Science",employee: "Tom Harris",      instance_type: "m5.2xlarge", monthly_cost: 277, cpu_usage: 55, ram_usage: 65 },
+  { team: "Data Science",employee: "Pooja Agarwal",   instance_type: "r5.xlarge",  monthly_cost: 182, cpu_usage: 62, ram_usage: 82 },
+  { team: "Data Science",employee: "Rahul Bose",      instance_type: "c5.2xlarge", monthly_cost: 245, cpu_usage:  5, ram_usage:  9 }, // idle
+  { team: "Data Science",employee: "Susan Lee",       instance_type: "m5.xlarge",  monthly_cost: 138, cpu_usage: 43, ram_usage: 55 },
 
-  // ── Security (6 instances) ────────────────────────────────────────────────
-  { team: "Security",     instance_id: "i-sec-001", instance_type: "c5.xlarge",   region: "us-east-1", monthly_cost: 122,  cpu_usage: 52, ram_usage: 44, uptime_days: 30 },
-  { team: "Security",     instance_id: "i-sec-002", instance_type: "m5.large",    region: "us-east-1", monthly_cost: 69,   cpu_usage: 33, ram_usage: 51, uptime_days: 30 },
-  { team: "Security",     instance_id: "i-sec-003", instance_type: "t3.large",    region: "us-west-2", monthly_cost: 60,   cpu_usage: 7,  ram_usage: 9,  uptime_days: 110 }, // IDLE
-  { team: "Security",     instance_id: "i-sec-004", instance_type: "r5.large",    region: "us-east-1", monthly_cost: 91,   cpu_usage: 61, ram_usage: 73, uptime_days: 30 },
-  { team: "Security",     instance_id: "i-sec-005", instance_type: "t3.medium",   region: "eu-west-1", monthly_cost: 30,   cpu_usage: 41, ram_usage: 36, uptime_days: 30 },
-  { team: "Security",     instance_id: "i-sec-006", instance_type: "c5.large",    region: "ap-south-1",monthly_cost: 61,   cpu_usage: 28, ram_usage: 32, uptime_days: 30 },
+  // R&D Team
+  { team: "R&D",         employee: "Dr. Kavita Reddy",instance_type: "m5.xlarge",  monthly_cost: 138, cpu_usage: 58, ram_usage: 52 },
+  { team: "R&D",         employee: "Sameer Joshi",    instance_type: "c5.xlarge",  monthly_cost: 122, cpu_usage: 70, ram_usage: 45 },
+  { team: "R&D",         employee: "Nina Kapoor",     instance_type: "t3.large",   monthly_cost: 60,  cpu_usage:  8, ram_usage: 13 }, // idle
+  { team: "R&D",         employee: "Chris Thompson",  instance_type: "r5.large",   monthly_cost: 91,  cpu_usage: 38, ram_usage: 67 },
+  { team: "R&D",         employee: "Deepa Menon",     instance_type: "m5.large",   monthly_cost: 69,  cpu_usage: 26, ram_usage: 33 },
+  { team: "R&D",         employee: "Alex Murphy",     instance_type: "t3.medium",  monthly_cost: 30,  cpu_usage: 12, ram_usage: 18 }, // idle
+
+  // Security Team
+  { team: "Security",    employee: "Rohit Malhotra",  instance_type: "c5.xlarge",  monthly_cost: 122, cpu_usage: 52, ram_usage: 44 },
+  { team: "Security",    employee: "Divya Srinivas",  instance_type: "m5.large",   monthly_cost: 69,  cpu_usage: 33, ram_usage: 51 },
+  { team: "Security",    employee: "Kevin Walsh",     instance_type: "t3.large",   monthly_cost: 60,  cpu_usage:  7, ram_usage:  9 }, // idle
+  { team: "Security",    employee: "Anjali Tiwari",   instance_type: "r5.large",   monthly_cost: 91,  cpu_usage: 61, ram_usage: 73 },
 ];
 
 export function getUniqueTeams(data) {
   return [...new Set(data.map(d => d.team))];
+}
+
+/**
+ * Parse a CSV string into companyData format.
+ * Expected columns (with or without header row):
+ *   team, employee, instance_type, monthly_cost, cpu_usage, ram_usage
+ */
+export function parseCSV(csvText) {
+  const lines = csvText.trim().split('\n').map(l => l.trim()).filter(Boolean);
+  const parsed = [];
+
+  // Skip header if first row contains letters in numeric columns
+  const start = isNaN(parseFloat(lines[0].split(',')[3])) ? 1 : 0;
+
+  for (let i = start; i < lines.length; i++) {
+    const cols = lines[i].split(',').map(c => c.trim());
+    if (cols.length < 6) continue;
+    parsed.push({
+      team:            cols[0],
+      employee:        cols[1],
+      instance_type:   cols[2],
+      monthly_cost:    parseFloat(cols[3]) || 0,
+      cpu_usage:       parseFloat(cols[4]) || 0,
+      ram_usage:       parseFloat(cols[5]) || 0,
+    });
+  }
+  return parsed;
 }

@@ -1,0 +1,13 @@
+team,employee,instance_type,monthly_cost,cpu_usage,ram_usage
+Development,Alice Johnson,t3.large,60,78,55
+Development,Ravi Sharma,t3.medium,30,45,40
+Development,Priya Mehta,c5.xlarge,122,72,68
+Operations,David Kim,m5.large,69,41,70
+Operations,Anita Rao,t3.micro,7,4,8
+Operations,Michael Chen,c5.large,61,34,31
+Data Science,Dr. Arun Iyer,p3.2xlarge,2203,88,91
+Data Science,Meera Pillai,g4dn.xlarge,379,74,80
+R&D,Dr. Kavita Reddy,m5.xlarge,138,58,52
+R&D,Sameer Joshi,c5.xlarge,122,70,45
+Security,Rohit Malhotra,c5.xlarge,122,52,44
+Security,Anjali Tiwari,r5.large,91,61,73
