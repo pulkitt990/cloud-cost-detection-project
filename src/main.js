@@ -739,6 +739,31 @@ function startDashboard() {
   // Tabs
   initTabs();
 
+  // Metric Card Modals
+  const cardRunning = document.getElementById('cardRunning');
+  const cardRequired = document.getElementById('cardRequired');
+  const cardCost = document.getElementById('cardCost');
+  const cardSavings = document.getElementById('cardSavings');
+
+  if (cardRunning)  cardRunning.addEventListener('click', () => openMetricModal('running'));
+  if (cardRequired) cardRequired.addEventListener('click', () => openMetricModal('shutdown'));
+  if (cardCost)     cardCost.addEventListener('click', () => openMetricModal('cost'));
+  if (cardSavings)  cardSavings.addEventListener('click', () => openMetricModal('savings'));
+
+  const metricModal = document.getElementById('metricModal');
+  const metricModalBackdrop = document.getElementById('metricModalBackdrop');
+  const metricModalClose = document.getElementById('metricModalClose');
+
+  function closeMetricModal() {
+    metricModal?.classList.remove('open');
+    metricModalBackdrop?.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  if (metricModalClose) metricModalClose.addEventListener('click', closeMetricModal);
+  if (metricModalBackdrop) metricModalBackdrop.addEventListener('click', closeMetricModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMetricModal(); });
+
   // Add SVG gradient definition for gauge (needed for stroke gradient)
   addGaugeSvgDefs();
 
@@ -758,6 +783,84 @@ function addGaugeSvgDefs() {
   `;
   defs.appendChild(gradient);
   svg.prepend(defs);
+}
+
+// ================================================
+// METRIC MODAL LOGIC
+// ================================================
+function openMetricModal(type) {
+  const modal = document.getElementById('metricModal');
+  const backdrop = document.getElementById('metricModalBackdrop');
+  const titleEl = document.getElementById('metricModalTitle');
+  const bodyEl = document.getElementById('metricModalBody');
+  if (!modal || !backdrop) return;
+
+  const m = computeMetrics();
+  let items = [];
+  let title = '';
+  
+  if (type === 'running') {
+    title = 'Active Instances Overview';
+    // All unfiltered instances sorted by CPU descending
+    items = [...m.filtered].sort((a, b) => b.cpu_usage - a.cpu_usage).map(d => ({
+      name: d.employee, team: d.team, meta: d.instance_type, details: `CPU: ${d.cpu_usage}%`
+    }));
+  } else if (type === 'shutdown') {
+    title = 'Recommended Shutdown Details';
+    // Priority to shutdown: sort idle ones with lowest CPU first
+    const idleList = m.filtered.filter(d => m.instances_to_stop.includes(d.employee));
+    items = idleList.sort((a, b) => a.cpu_usage - b.cpu_usage).map(d => ({
+      name: d.employee, team: d.team, meta: `Current Cost: $${d.monthly_cost}/mo`, details: `CPU: ${d.cpu_usage}% (Idle)`
+    }));
+  } else if (type === 'cost') {
+    title = 'Monthly Cost Breakdown';
+    // Sort all instances by cost descending
+    items = [...m.filtered].sort((a, b) => b.monthly_cost - a.monthly_cost).map(d => ({
+      name: d.employee, team: d.team, meta: d.instance_type, details: `$${d.monthly_cost}/mo`
+    }));
+  } else if (type === 'savings') {
+    title = 'Potential Savings Details';
+    // Only items that can be optimized
+    items = m.recommendations.sort((a, b) => b.savings - a.savings).map(r => ({
+      name: r.employee, team: 'Optimization', meta: r.action, details: `Save $${r.savings}/mo`
+    }));
+  }
+
+  // Build Table HTML
+  let tableHtml = '<div style="padding:10px;text-align:center;color:var(--text-secondary);">No data matches the selected criteria.</div>';
+  
+  if (items.length > 0) {
+    tableHtml = `
+      <table class="modal-table">
+        <thead>
+          <tr>
+            <th>Name (Employee)</th>
+            <th>Team</th>
+            <th>Type/Role</th>
+            <th style="text-align:right;">Data / Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map(i => `
+            <tr>
+              <td><strong>${i.name}</strong></td>
+              <td>${i.team}</td>
+              <td style="opacity:0.8;">${i.meta}</td>
+              <td style="text-align:right; font-weight:600; color:var(--accent1);">${i.details}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  titleEl.textContent = title;
+  bodyEl.innerHTML = tableHtml;
+
+  // Show
+  document.body.style.overflow = 'hidden';
+  modal.classList.add('open');
+  backdrop.classList.add('open');
 }
 
 // Start!

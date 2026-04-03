@@ -137,22 +137,22 @@
 
     <!-- Metric Cards -->
     <section class="metrics-grid" id="metricsGrid">
-      <div class="metric-card" data-index="0">
+      <div class="metric-card clickable" data-index="0">
         <span class="metric-label">Active Instances</span>
         <span class="metric-value" id="metricRunning">40</span>
         <span class="metric-delta" id="metricRunningDelta"></span>
       </div>
-      <div class="metric-card" data-index="1">
+      <div class="metric-card clickable" id="cardRequired" data-index="1">
         <span class="metric-label">Recommended Shutdown</span>
         <span class="metric-value" id="metricRequired">--</span>
         <span class="metric-delta negative" id="metricRequiredDelta"></span>
       </div>
-      <div class="metric-card" data-index="2">
+      <div class="metric-card clickable" id="cardCost" data-index="2">
         <span class="metric-label">Current Monthly Cost</span>
         <span class="metric-value" id="metricCost">$--</span>
         <span class="metric-delta" id="metricCostDelta">Across all regions</span>
       </div>
-      <div class="metric-card" data-index="3">
+      <div class="metric-card clickable" id="cardSavings" data-index="3">
         <span class="metric-label">Potential Savings</span>
         <span class="metric-value" id="metricSavings">$--</span>
         <span class="metric-delta positive" id="metricSavingsDelta"></span>
@@ -240,6 +240,18 @@
       ✦ © 2026 CloudSense ✦
     </footer>
   </main>
+
+  <!-- Metric Detail Modal -->
+  <div class="modal-backdrop" id="metricModalBackdrop"></div>
+  <div class="modal" id="metricModal">
+    <div class="modal-header">
+      <h3 id="metricModalTitle">Details</h3>
+      <button class="modal-close" id="metricModalClose">✕</button>
+    </div>
+    <div class="modal-body" id="metricModalBody">
+      <!-- Table populated by JS -->
+    </div>
+  </div>
 
   <script type="module" src="/src/main.js"></script>
 </body>
