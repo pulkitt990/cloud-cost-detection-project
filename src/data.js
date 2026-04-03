@@ -58,6 +58,17 @@ export function getUniqueTeams(data) {
   return [...new Set(data.map(d => d.team))];
 }
 
+// Ensure every employee gets an auto-generated PIN (e.g. Alice Johnson -> alice123)
+export function attachPins(dataArray) {
+  dataArray.forEach(d => {
+    if (!d.pin) {
+      const firstName = d.employee.split(' ')[0].replace('Dr.', '').trim().toLowerCase();
+      d.pin = firstName + "123";
+    }
+  });
+}
+attachPins(companyData);
+
 /**
  * Parse a CSV string into companyData format.
  * Expected columns (with or without header row):
@@ -82,5 +93,6 @@ export function parseCSV(csvText) {
       ram_usage:       parseFloat(cols[5]) || 0,
     });
   }
+  attachPins(parsed);
   return parsed;
 }

@@ -104,21 +104,73 @@ function initPortal(user) {
   const lastProfile = localStorage.getItem('emp-portal-profile');
   if (lastProfile && allEmployees.includes(lastProfile)) {
     profileSelect.value = lastProfile;
-    renderProfile(lastProfile, welcomeDiv, selectPrompt, empContent);
+    showPinPrompt(lastProfile, welcomeDiv, selectPrompt, empContent);
   }
 
   profileSelect.addEventListener('change', () => {
     const selected = profileSelect.value;
     if (selected) {
-      localStorage.setItem('emp-portal-profile', selected);
-      renderProfile(selected, welcomeDiv, selectPrompt, empContent);
+      showPinPrompt(selected, welcomeDiv, selectPrompt, empContent);
     } else {
       welcomeDiv.style.display = 'none';
       selectPrompt.style.display = 'flex';
       empContent.style.display = 'none';
+      document.getElementById('empPinPrompt').style.display = 'none';
+      localStorage.removeItem('emp-portal-profile');
     }
   });
 }
+
+// ── PIN Auth Flow ────────────────────────────────────────────────────────
+let currentAuthEmp = null;
+
+function showPinPrompt(employeeName, welcomeDiv, selectPrompt, empContent) {
+  const emp = companyData.find(d => d.employee === employeeName);
+  if (!emp) return;
+
+  // Hide dashboard elements
+  welcomeDiv.style.display = 'none';
+  selectPrompt.style.display = 'none';
+  empContent.style.display = 'none';
+
+  // Show PIN prompt
+  const pinPrompt = document.getElementById('empPinPrompt');
+  pinPrompt.style.display = 'flex';
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  
+  const firstName = emp.employee.split(' ')[0].replace('Dr.', '').trim();
+  document.getElementById('pinGreeting').textContent = `Welcome, ${firstName}`;
+
+  currentAuthEmp = emp;
+}
+
+document.getElementById('pinSubmit')?.addEventListener('click', () => {
+  if (!currentAuthEmp) return;
+  const inputVal = document.getElementById('pinInput').value;
+  
+  if (inputVal === currentAuthEmp.pin) {
+    // Unlock successful
+    document.getElementById('empPinPrompt').style.display = 'none';
+    localStorage.setItem('emp-portal-profile', currentAuthEmp.employee);
+    
+    // Resume render
+    const welcomeDiv = document.getElementById('empWelcome');
+    const selectPrompt = document.getElementById('empSelectPrompt');
+    const empContent = document.getElementById('empContent');
+    renderProfile(currentAuthEmp.employee, welcomeDiv, selectPrompt, empContent);
+  } else {
+    // Unlock failed
+    document.getElementById('pinError').style.display = 'block';
+  }
+});
+
+// Optionally support pressing Enter in the PIN input
+document.getElementById('pinInput')?.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') {
+    document.getElementById('pinSubmit').click();
+  }
+});
 
 // ── Render personal + team dashboard ──────────────────────────────────────
 function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
