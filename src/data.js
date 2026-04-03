@@ -62,7 +62,8 @@ export function getUniqueTeams(data) {
 export function attachPins(dataArray) {
   dataArray.forEach(d => {
     if (!d.pin) {
-      const firstName = d.employee.split(' ')[0].replace('Dr.', '').trim().toLowerCase();
+      const cleanName = d.employee.replace('Dr. ', '').trim();
+      const firstName = cleanName.split(' ')[0].toLowerCase();
       d.pin = firstName + "123";
     }
   });
