@@ -1,7 +1,7 @@
 import './style.css';
 import Chart from 'chart.js/auto';
 import { companyData, getUniqueTeams } from './data.js';
-import { analyzeResources, INSTANCE_COST } from './optimizer.js';
+import { analyzeResources } from './optimizer.js';
 import { auth } from './firebase.js';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 
@@ -9,9 +9,8 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 // STATE
 // ================================================
 const state = {
-  instances: 12,
   disabledTeams: [],
-  disabledEmployees: [],
+  disabledInstances: [],
   theme: localStorage.getItem('theme') || 'light',
 };
 
@@ -66,22 +65,23 @@ function getFilteredData() {
   return companyData.filter(
     d =>
       !state.disabledTeams.includes(d.team) &&
-      !state.disabledEmployees.includes(d.employee)
+      !state.disabledInstances.includes(d.instance_id)
   );
 }
 
 function computeMetrics() {
   const filtered = getFilteredData();
   const results = analyzeResources(filtered);
-  const currentCost = state.instances * INSTANCE_COST;
+  const currentCost = results.current_cost;
   const savings = currentCost - results.optimized_cost;
   const efficiency =
-    state.instances > 0
-      ? (results.required_instances / state.instances) * 100
+    results.current_instances > 0
+      ? (results.required_instances / results.current_instances) * 100
       : 0;
 
   return { ...results, currentCost, savings, efficiency, filtered };
 }
+
 
 // ================================================
 // UPDATE METRICS UI
@@ -89,10 +89,10 @@ function computeMetrics() {
 function updateMetrics() {
   const m = computeMetrics();
 
-  document.getElementById('metricRunning').textContent = state.instances;
+  document.getElementById('metricRunning').textContent = m.current_instances;
   document.getElementById('metricRequired').textContent = m.required_instances;
 
-  const delta = m.required_instances - state.instances;
+  const delta = m.required_instances - m.current_instances;
   const deltaEl = document.getElementById('metricRequiredDelta');
   deltaEl.textContent = delta <= 0 ? `↓ ${delta}` : `↑ +${delta}`;
   deltaEl.className = `metric-delta ${delta <= 0 ? 'negative' : 'positive'}`;
@@ -237,12 +237,12 @@ function renderHeatmapChart() {
   }
 
   const teams = getUniqueTeams(filtered);
-  const employees = [...new Set(filtered.map(d => d.employee))];
+  const employees = [...new Set(filtered.map(d => d.instance_id))];
 
   // Build matrix-like data as grouped bars (simulated heatmap)
   const datasets = teams.map((team, ti) => {
     const data = employees.map(emp => {
-      const match = filtered.find(d => d.employee === emp && d.team === team);
+      const match = filtered.find(d => d.instance_id === emp && d.team === team);
       return match ? match.cpu_usage : 0;
     });
     return {
@@ -456,13 +456,13 @@ function renderEmployeeList() {
       const employees = companyData.filter(d => d.team === team);
       const rows = employees
         .map(emp => {
-          const isActive = !state.disabledEmployees.includes(emp.employee);
+          const isActive = !state.disabledInstances.includes(emp.instance_id);
           return `
           <div class="emp-row">
-            <span class="emp-name">👤 ${emp.employee.replace(/_/g, ' ')}</span>
-            <span class="emp-status ${isActive ? 'active' : 'idle'}">${isActive ? '✅ Active' : '❌ Idle'}</span>
-            <button class="emp-action-btn ${isActive ? 'suspend' : 'resume'}" data-employee="${emp.employee}">
-              ${isActive ? 'Suspend' : 'Resume'}
+            <span class="emp-name">🖥️ ${emp.instance_id.replace(/_/g, ' ')} <small style="opacity: 0.7">(${emp.instance_type}) - $${emp.monthly_cost}</small></span>
+            <span class="emp-status ${isActive ? 'active' : 'idle'}">${isActive ? '✅ Active' : '❌ Stopped'}</span>
+            <button class="emp-action-btn ${isActive ? 'suspend' : 'resume'}" data-instance="${emp.instance_id}">
+              ${isActive ? 'Stop' : 'Start'}
             </button>
           </div>
         `;
@@ -472,7 +472,7 @@ function renderEmployeeList() {
       return `
       <div class="team-group">
         <div class="team-group-header" data-team="${team}">
-          <span class="team-group-title">📋 ${team} Staffing</span>
+          <span class="team-group-title">☁️ ${team} Instances</span>
           <span class="team-group-chevron">▼</span>
         </div>
         <div class="team-group-body">${rows}</div>
@@ -491,11 +491,11 @@ function renderEmployeeList() {
   // Employee action buttons
   container.querySelectorAll('.emp-action-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const emp = btn.dataset.employee;
-      if (state.disabledEmployees.includes(emp)) {
-        state.disabledEmployees = state.disabledEmployees.filter(e => e !== emp);
+      const emp = btn.dataset.instance;
+      if (state.disabledInstances.includes(emp)) {
+        state.disabledInstances = state.disabledInstances.filter(e => e !== emp);
       } else {
-        state.disabledEmployees.push(emp);
+        state.disabledInstances.push(emp);
       }
       refreshAll();
     });
@@ -568,28 +568,20 @@ function startDashboard() {
     });
   }
 
-  // Instance slider
+  // Instance slider (Hidden, logic fully dynamic now)
   const slider = document.getElementById('instanceSlider');
-  const sliderValue = document.getElementById('sliderValue');
   if (slider) {
-    slider.value = state.instances;
-    slider.addEventListener('input', e => {
-      state.instances = parseInt(e.target.value);
-      sliderValue.textContent = state.instances;
-      updateMetrics();
-      renderForecastChart();
-    });
+    slider.parentElement.style.opacity = '0.3';
+    slider.disabled = true;
+    slider.parentElement.style.pointerEvents = 'none';
   }
 
   // Reset button
   const resetBtn = document.getElementById('resetBtn');
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      state.instances = 12;
       state.disabledTeams = [];
-      state.disabledEmployees = [];
-      slider.value = 12;
-      sliderValue.textContent = '12';
+      state.disabledInstances = [];
       refreshAll();
       showToast('Environment reset to defaults!');
     });
@@ -600,11 +592,15 @@ function startDashboard() {
   if (optimizeBtn) {
     optimizeBtn.addEventListener('click', () => {
       const m = computeMetrics();
-      state.instances = m.required_instances;
-      slider.value = m.required_instances;
-      sliderValue.textContent = m.required_instances;
+      if (m.instances_to_stop.length === 0) {
+        showToast('All optimized! Zero waste.');
+        return;
+      }
+      // Automatically shut down flagged instances
+      const newDisabled = [...new Set([...state.disabledInstances, ...m.instances_to_stop])];
+      state.disabledInstances = newDisabled;
       refreshAll();
-      showToast(`Optimized to ${m.required_instances} instances!`);
+      showToast(`Automatically stopped ${m.instances_to_stop.length} idle instances!`);
     });
   }
 
