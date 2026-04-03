@@ -39,7 +39,10 @@
 
 /* ── Login Prompt ──────────────────────────── */
 .emp-login-prompt {
-  min-height: 100vh;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,6 +50,7 @@
   background: radial-gradient(ellipse at 30% 50%, rgba(108, 92, 231, 0.15), transparent 60%),
               radial-gradient(ellipse at 70% 60%, rgba(0, 184, 148, 0.1), transparent 55%),
               var(--bg-primary);
+  z-index: 1000;
 }
 .emp-login-card {
   width: 100%;
