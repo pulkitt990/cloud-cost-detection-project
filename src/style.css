@@ -1974,7 +1974,9 @@ body {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -46%) scale(0.95);
-  background: var(--card-bg);
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border);
   box-shadow: 0 24px 48px rgba(0,0,0,0.3);
   border-radius: var(--radius-lg);
