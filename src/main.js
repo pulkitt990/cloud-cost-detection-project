@@ -169,8 +169,6 @@ function renderTeamBarChart() {
   const ctx = document.getElementById('teamBarChart');
   if (!ctx) return;
 
-  if (teamChart) teamChart.destroy();
-
   const filtered = getFilteredData();
   const teams = getUniqueTeams(filtered);
   const colors = getThemeColors();
@@ -181,6 +179,13 @@ function renderTeamBarChart() {
       ? teamData.reduce((s, d) => s + d.cpu_usage, 0) / teamData.length
       : 0;
   });
+
+  if (teamChart) {
+    teamChart.data.labels = teams;
+    teamChart.data.datasets[0].data = teamAvgCpu;
+    teamChart.update();
+    return;
+  }
 
   teamChart = new Chart(ctx, {
     type: 'bar',
@@ -245,8 +250,6 @@ function renderHeatmapChart() {
   const ctx = document.getElementById('heatmapChart');
   if (!ctx) return;
 
-  if (heatmapChart) heatmapChart.destroy();
-
   const filtered = getFilteredData();
   const colors = getThemeColors();
 
@@ -272,6 +275,13 @@ function renderHeatmapChart() {
       borderSkipped: false,
     };
   });
+
+  if (heatmapChart) {
+    heatmapChart.data.labels = employees.map(e => e.replace(/_/g, ' '));
+    heatmapChart.data.datasets = datasets;
+    heatmapChart.update();
+    return;
+  }
 
   heatmapChart = new Chart(ctx, {
     type: 'bar',
@@ -331,16 +341,21 @@ function renderForecastChart() {
   const ctx = document.getElementById('forecastChart');
   if (!ctx) return;
 
-  if (forecastChart) forecastChart.destroy();
-
   const m = computeMetrics();
   const colors = getThemeColors();
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Projection'];
-  const currentTrend = [0, 1, 2, 3, 4].map(i => m.currentCost * (1 + i * 0.02));
-  currentTrend.push(m.currentCost * 1.05);
-  const optimizedTrend = [0, 1, 2, 3, 4].map(i => m.currentCost * (1 + i * 0.02));
+  const currentTrend = [0, 1, 2, 3, 4].map(i => m.current_cost * (1 + i * 0.02));
+  currentTrend.push(m.current_cost * 1.05);
+  const optimizedTrend = [0, 1, 2, 3, 4].map(i => m.current_cost * (1 + i * 0.02));
   optimizedTrend.push(m.optimized_cost);
+
+  if (forecastChart) {
+    forecastChart.data.datasets[0].data = currentTrend;
+    forecastChart.data.datasets[1].data = optimizedTrend;
+    forecastChart.update();
+    return;
+  }
 
   forecastChart = new Chart(ctx, {
     type: 'line',
@@ -586,15 +601,37 @@ function showToast(message) {
   setTimeout(() => toast.remove(), 3200);
 }
 
-// ================================================
-// REFRESH ALL
-// ================================================
 function refreshAll() {
   updateMetrics();
   renderAllCharts();
   renderTeamCards();
   renderEmployeeList();
 }
+
+// ================================================
+// LIVE TRAFFIC SIMULATION
+// ================================================
+function simulateLiveTraffic() {
+  let changed = false;
+  companyData.forEach(emp => {
+    // Only active instances fluctuate
+    if (!state.disabledInstances.includes(emp.employee)) {
+      const fluctuation = Math.floor(Math.random() * 9) - 4; // -4% to +4%
+      const oldVal = emp.cpu_usage;
+      emp.cpu_usage = Math.max(1, Math.min(100, emp.cpu_usage + fluctuation));
+      if (oldVal !== emp.cpu_usage) changed = true;
+    }
+  });
+
+  if (changed) {
+    // We only update charts and top metrics to avoid interrupting user interactions in lists
+    updateMetrics();
+    renderAllCharts();
+  }
+}
+
+// Start simulation immediately so it's running when page loads
+setInterval(simulateLiveTraffic, 4500);
 
 // ================================================
 // INITIALIZATION
