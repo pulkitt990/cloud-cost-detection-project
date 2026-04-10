@@ -611,6 +611,8 @@ function refreshAll() {
 // ================================================
 // LIVE TRAFFIC SIMULATION
 // ================================================
+let autopilotEnabled = false;
+
 function simulateLiveTraffic() {
   let changed = false;
   companyData.forEach(emp => {
@@ -624,6 +626,20 @@ function simulateLiveTraffic() {
   });
 
   if (changed) {
+    if (autopilotEnabled) {
+      const m = computeMetrics();
+      if (m.instances_to_stop.length > 0) {
+        const originalLen = state.disabledInstances.length;
+        const newDisabled = [...new Set([...state.disabledInstances, ...m.instances_to_stop])];
+        if (newDisabled.length > originalLen) {
+          state.disabledInstances = newDisabled;
+          const stoppedCount = newDisabled.length - originalLen;
+          showToast(`🤖 Auto-Pilot suspended ${stoppedCount} idle instances.`);
+          renderTeamCards();
+          renderEmployeeList();
+        }
+      }
+    }
     // We only update charts and top metrics to avoid interrupting user interactions in lists
     updateMetrics();
     renderAllCharts();
@@ -747,6 +763,19 @@ function startDashboard() {
       state.disabledInstances = newDisabled;
       refreshAll();
       showToast(`Automatically stopped ${m.instances_to_stop.length} idle instances!`);
+    });
+  }
+
+  // Autonomous Auto-Pilot Toggle
+  const autopilotToggle = document.getElementById('autopilotToggle');
+  if (autopilotToggle) {
+    autopilotToggle.addEventListener('change', (e) => {
+      autopilotEnabled = e.target.checked;
+      if (autopilotEnabled) {
+        showToast('🤖 Autonomous Auto-Pilot Engaged. Scanning infrastructure 24/7...');
+      } else {
+        showToast('Auto-Pilot Disengaged. Resuming manual monitoring.');
+      }
     });
   }
 
