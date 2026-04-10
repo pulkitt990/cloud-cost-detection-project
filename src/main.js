@@ -25,12 +25,13 @@ function applyTheme() {
   localStorage.setItem('theme', state.theme);
 
   const icon = document.getElementById('themeIcon');
+  if (icon) icon.innerHTML = state.theme === 'dark' ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>';
   const label = document.getElementById('themeLabel');
-  if (icon) icon.textContent = state.theme === 'dark' ? '🌙' : '☀️';
   if (label) label.textContent = state.theme === 'dark' ? 'Dark Mode' : 'Light Mode';
 
   // Re-render charts with new theme colors
   renderAllCharts();
+  lucide.createIcons();
 }
 
 function toggleTheme() {
@@ -97,7 +98,7 @@ function updateMetrics() {
 
   const idleCount = m.instances_to_stop.length;
   const deltaEl = document.getElementById('metricRequiredDelta');
-  deltaEl.textContent = idleCount > 0 ? `⚠️ ${idleCount} idle detected` : '✅ All instances active';
+  deltaEl.innerHTML = idleCount > 0 ? `<i data-lucide="alert-triangle" style="width:14px; vertical-align:middle;"></i> ${idleCount} idle detected` : `<i data-lucide="check-circle" style="width:14px; vertical-align:middle;"></i> All instances active`;
   deltaEl.className = `metric-delta ${idleCount > 0 ? 'negative' : 'positive'}`;
 
   // Sync slider
@@ -125,6 +126,7 @@ function updateMetrics() {
     ? (m.required_instances / m.current_instances) * 100
     : 0;
   updateGauge(efficiency);
+  lucide.createIcons();
 }
 
 // ================================================
@@ -345,10 +347,10 @@ function renderForecastChart() {
   const colors = getThemeColors();
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Projection'];
-  const currentTrend = [0, 1, 2, 3, 4].map(i => m.current_cost * (1 + i * 0.02));
-  currentTrend.push(m.current_cost * 1.05);
-  const optimizedTrend = [0, 1, 2, 3, 4].map(i => m.current_cost * (1 + i * 0.02));
-  optimizedTrend.push(m.optimized_cost);
+  const currentTrend = [0, 1, 2, 3, 4].map(i => m.currentCost * (1 + i * 0.02));
+  currentTrend.push(m.currentCost * 1.05);
+  const optimizedTrend = [0, 1, 2, 3, 4].map(i => m.currentCost * (1 + i * 0.02));
+  optimizedTrend.push(m.currentCost - m.savings);
 
   if (forecastChart) {
     forecastChart.data.datasets[0].data = currentTrend;
@@ -472,7 +474,7 @@ function renderTeamCards() {
           ${isTeamActive ? 'Active' : 'Stopped'}
         </div>
         <button class="team-toggle-btn ${isTeamActive ? 'stop' : 'start'}" data-team="${team}">
-          ${isTeamActive ? '⏹️ Stop All' : '▶️ Start All'}
+          ${isTeamActive ? '<i data-lucide="square"></i> Stop All' : '<i data-lucide="play"></i> Start All'}
         </button>
       </div>
     `;
@@ -490,6 +492,7 @@ function renderTeamCards() {
       refreshAll();
     });
   });
+  lucide.createIcons();
 }
 
 function renderEmployeeList() {
@@ -507,12 +510,12 @@ function renderEmployeeList() {
       banner.style.display = 'block';
       banner.style.background = 'rgba(243, 156, 18, 0.1)';
       banner.style.borderColor = 'rgba(243,156,18,0.4)';
-      banner.innerHTML = `⚠️ <strong>${idleCount} employees</strong> are using very low CPU (&lt;15%). Consider suspending to save <strong>$${savingsAmount.toLocaleString()}/mo</strong>.`;
+      banner.innerHTML = `<i data-lucide="alert-triangle" style="display:inline; width:16px; vertical-align:middle; margin-right:4px;"></i> <strong>${idleCount} employees</strong> are using very low CPU (&lt;15%). Consider suspending to save <strong>$${savingsAmount.toLocaleString()}/mo</strong>.`;
     } else {
       banner.style.display = 'block';
       banner.style.background = 'rgba(0,184,148,0.1)';
       banner.style.borderColor = '#00b894';
-      banner.innerHTML = `✅ All employees are utilizing their resources well.`;
+      banner.innerHTML = `<i data-lucide="check-circle" style="display:inline; width:16px; vertical-align:middle; margin-right:4px;"></i> ✅ All employees are utilizing their resources well.`;
     }
   }
 
@@ -525,14 +528,14 @@ function renderEmployeeList() {
       const rows = employees.map(emp => {
         const isActive = !state.disabledInstances.includes(emp.employee);
         const isIdle = results.instances_to_stop.includes(emp.employee);
-        const statusLabel = !isActive ? '❌ Suspended'
-          : isIdle ? '🟡 Low Usage'
-          : '🟢 Active';
+        const statusLabel = !isActive ? '<i data-lucide="x-circle"></i> Suspended'
+          : isIdle ? '<i data-lucide="alert-circle"></i> Low Usage'
+          : '<i data-lucide="check-circle"></i> Active';
         const statusClass = isActive ? 'active' : 'idle';
 
         return `
           <div class="emp-row">
-            <span class="emp-name">👤 ${emp.employee}</span>
+            <span class="emp-name"><i data-lucide="user"></i> ${emp.employee}</span>
             <span class="emp-meta">${emp.instance_type} &middot; $${emp.monthly_cost}/mo</span>
             <span class="emp-cpu">CPU: ${emp.cpu_usage}%</span>
             <span class="emp-status ${statusClass}">${statusLabel}</span>
@@ -546,8 +549,8 @@ function renderEmployeeList() {
       return `
         <div class="team-group">
           <div class="team-group-header">
-            <span class="team-group-title">🏢 ${team} (${employees.length})</span>
-            <span class="team-group-chevron">▼</span>
+            <span class="team-group-title"><i data-lucide="building"></i> ${team} (${employees.length})</span>
+            <span class="team-group-chevron"><i data-lucide="chevron-down"></i></span>
           </div>
           <div class="team-group-body">${rows}</div>
         </div>
@@ -572,6 +575,7 @@ function renderEmployeeList() {
       refreshAll();
     });
   });
+  lucide.createIcons();
 }
 
 // ================================================
@@ -596,8 +600,15 @@ function showToast(message) {
   document.querySelectorAll('.toast').forEach(t => t.remove());
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `✅ ${message}`;
+  
+  let prefix = '';
+  if (!message.includes('<i')) {
+    prefix = message.includes('Error') ? '<i data-lucide="x-circle" style="color:var(--danger)"></i> ' : '<i data-lucide="check-circle" style="color:var(--success)"></i> ';
+  }
+  
+  toast.innerHTML = `<div style="display:flex;align-items:center;gap:8px;">${prefix}${message}</div>`;
   document.body.appendChild(toast);
+  lucide.createIcons();
   setTimeout(() => toast.remove(), 3200);
 }
 
@@ -634,7 +645,7 @@ function simulateLiveTraffic() {
         if (newDisabled.length > originalLen) {
           state.disabledInstances = newDisabled;
           const stoppedCount = newDisabled.length - originalLen;
-          showToast(`🤖 Auto-Pilot suspended ${stoppedCount} idle instances.`);
+          showToast(`<i data-lucide="bot" style="display:inline; width:20px; vertical-align:middle; margin-right:4px;"></i> Auto-Pilot suspended ${stoppedCount} idle instances.`);
           renderTeamCards();
           renderEmployeeList();
         }
@@ -772,7 +783,7 @@ function startDashboard() {
     autopilotToggle.addEventListener('change', (e) => {
       autopilotEnabled = e.target.checked;
       if (autopilotEnabled) {
-        showToast('🤖 Autonomous Auto-Pilot Engaged. Scanning infrastructure 24/7...');
+        showToast('<i data-lucide="bot" style="display:inline; width:20px; vertical-align:middle; margin-right:4px;"></i> Autonomous Auto-Pilot Engaged. Scanning infrastructure 24/7...');
       } else {
         showToast('Auto-Pilot Disengaged. Resuming manual monitoring.');
       }
@@ -793,7 +804,7 @@ function startDashboard() {
         csvRows.push(`${d.team},${d.employee},${d.instance_type},$${d.monthly_cost},${d.cpu_usage}%,${d.ram_usage}%`);
       });
       
-      const csvStr = csvRows.join('\\n');
+      const csvStr = csvRows.join('\n');
       const blob = new Blob([csvStr], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       

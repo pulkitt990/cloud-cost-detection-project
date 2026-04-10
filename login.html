@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CloudSense — Sign In</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/src/style.css" />
+  <title>CloudSense — Login</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css" />
+  <link rel="stylesheet" href="./src/login.css" />
 </head>
 <body class="login-body">
 
@@ -19,7 +20,7 @@
     <div class="login-right">
       <!-- Theme toggle -->
       <button class="login-theme-btn" id="loginThemeBtn" aria-label="Toggle theme">
-        <span id="loginThemeIcon">🌙</span>
+        <i data-lucide="moon" id="loginThemeIcon"></i>
       </button>
 
       <div class="login-form-wrap">
@@ -71,7 +72,7 @@
           <div class="form-group hidden" id="nameGroup">
             <label class="form-label" for="nameInput">Full Name</label>
             <div class="input-wrapper">
-              <svg class="input-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <i data-lucide="user" class="input-icon-svg"></i>
               <input type="text" id="nameInput" class="form-input" placeholder="Your full name" autocomplete="name" />
             </div>
           </div>
@@ -79,7 +80,7 @@
           <div class="form-group">
             <label class="form-label" for="emailInput">Email Address</label>
             <div class="input-wrapper">
-              <svg class="input-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <i data-lucide="mail" class="input-icon-svg"></i>
               <input type="email" id="emailInput" class="form-input" placeholder="admin@company.com" autocomplete="email" />
             </div>
           </div>
@@ -90,14 +91,14 @@
               <button type="button" class="forgot-password-btn" id="forgotBtn">Forgot password?</button>
             </div>
             <div class="input-wrapper">
-              <svg class="input-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <i data-lucide="lock" class="input-icon-svg"></i>
               <input type="password" id="passwordInput" class="form-input" placeholder="Enter your password" autocomplete="current-password" />
             </div>
           </div>
 
           <button type="submit" class="login-submit-btn" id="submitBtn">
             <span id="btnText">Sign In</span>
-            <svg id="btnArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <i data-lucide="arrow-right" id="btnArrow"></i>
             <span class="btn-loader hidden" id="btnLoader"><span class="spinner"></span></span>
           </button>
         </form>
@@ -113,6 +114,7 @@
     </div>
   </div>
 
-  <script type="module" src="/src/login.js"></script>
+  <script type="module" src="./src/login.js"></script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
