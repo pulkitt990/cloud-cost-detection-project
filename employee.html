@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CloudSense — Employee Portal</title>
+  <title>CloudSense — My Dashboard</title>
   <meta name="description" content="Your personal cloud resource usage dashboard powered by CloudSense." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
-  <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/style.css" />
   <link rel="stylesheet" href="/src/employee.css" />
 </head>
@@ -27,7 +26,16 @@
   <div id="loginPrompt" class="emp-login-prompt" style="display:none;">
     <div class="emp-login-card glass-card">
       <div class="emp-login-brand">
-        <div style="background:linear-gradient(135deg, var(--accent-1), var(--accent-2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;"><i data-lucide="cloud"></i></div> CloudSense
+        <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="eg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c6ff7"/>
+              <stop offset="100%" stop-color="#00d9d4"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#eg)"/>
+        </svg>
+        <span>CloudSense</span>
       </div>
       <h2>Employee Portal</h2>
       <p>Sign in with your company Google account to access your personal resource dashboard.</p>
@@ -50,20 +58,28 @@
     <!-- Topbar -->
     <header class="emp-topbar">
       <div class="emp-topbar-brand">
-        <div style="background:linear-gradient(135deg, var(--accent-1), var(--accent-2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;"><i data-lucide="cloud"></i></div> CloudSense 
-        <span class="emp-portal-label">Employee</span>
+        <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="tb-g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c6ff7"/>
+              <stop offset="100%" stop-color="#00d9d4"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#tb-g)"/>
+        </svg>
+        <span>CloudSense <span class="emp-portal-label">Employee</span></span>
       </div>
 
       <!-- Profile Selector -->
       <div class="emp-profile-select-wrap">
-        <label for="profileSelect" class="emp-profile-label" style="display:flex;align-items:center;gap:6px;"><i data-lucide="user" style="width:16px;height:16px;"></i> Your Profile:</label>
+        <label for="profileSelect" class="emp-profile-label">👤 Your Profile:</label>
         <select id="profileSelect" class="emp-profile-dropdown">
           <option value="">— Select your name —</option>
         </select>
       </div>
 
       <div class="emp-topbar-actions">
-        <button class="emp-theme-btn" id="empThemeBtn" aria-label="Toggle theme"><i data-lucide="moon"></i></button>
+        <button class="emp-theme-btn" id="empThemeBtn" aria-label="Toggle theme">🌙</button>
         <button class="emp-signout-btn" id="empSignoutBtn">Sign Out</button>
       </div>
     </header>
@@ -74,22 +90,22 @@
       <!-- Welcome Banner -->
       <div class="emp-welcome glass-card" id="empWelcome" style="display:none;">
         <div class="emp-welcome-text">
-          <h1 id="empGreeting">Welcome back!</h1>
-          <p><span id="empTeamLabel"></span> · <span id="empInstanceLabel"></span></p>
+          <h1 id="empGreeting">Welcome back! 👋</h1>
+          <p id="empSubtitle">Select your name above to view your resource usage.</p>
         </div>
         <div class="emp-status-badge" id="empStatusBadge"></div>
       </div>
 
       <!-- Select Profile Prompt -->
       <div class="emp-select-prompt" id="empSelectPrompt">
-        <div class="esp-icon"><i data-lucide="cloud" style="width:64px;height:64px;"></i></div>
+        <div class="esp-icon">☁️</div>
         <h2>Select Your Profile</h2>
         <p>Use the dropdown above to choose your name and view your personal resource dashboard.</p>
       </div>
 
       <!-- PIN Auth Prompt -->
       <div class="emp-pin-prompt glass-card" id="empPinPrompt" style="display:none; flex-direction:column; align-items:center; max-width:400px; margin: 0 auto; gap:16px; padding: 40px 32px; text-align:center;">
-        <div class="esp-icon" style="margin-bottom:0;"><i data-lucide="lock" style="width:48px;height:48px;"></i></div>
+        <div class="esp-icon" style="font-size:3rem; margin-bottom:0;">🔒</div>
         <h2 id="pinGreeting" style="font-family:'Plus Jakarta Sans', sans-serif;">Enter Access Code</h2>
         <p style="color:var(--text-secondary); font-size:0.9rem;">Please enter your unique PIN to view your designated dashboard.</p>
         
@@ -97,8 +113,16 @@
           <div style="position:relative; width:100%;">
             <input type="password" id="pinInput" placeholder="Enter PIN (e.g. alice123)" style="width:100%; padding:14px; padding-right:48px; border-radius:12px; border:1px solid var(--border); background:var(--bg-input); color:var(--text-primary); font-family:'Inter', sans-serif; font-size:1rem; outline:none; text-align:center;" />
             <button id="pinToggleBtn" type="button" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text-secondary); padding:4px;" aria-label="Toggle Password Visibility">
-              <i data-lucide="eye" id="eyeIconShow"></i>
-              <i data-lucide="eye-off" id="eyeIconHide" style="display:none;"></i>
+              <!-- Eye outline -->
+              <svg id="eyeIconShow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <!-- Eye slash -->
+              <svg id="eyeIconHide" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
             </button>
           </div>
           <button id="pinSubmit" style="padding:14px 24px; border-radius:12px; background:linear-gradient(135deg, var(--accent-1), var(--accent-2)); color:white; border:none; font-weight:700; font-family:'Inter', sans-serif; font-size:1rem; cursor:pointer;">Unlock Dashboard</button>
@@ -107,47 +131,47 @@
       </div>
 
       <!-- Dashboard Content -->
-      <div id="empContent" style="display:none; flex-direction:column; gap:24px;">
+      <div id="empContent" style="display:none;">
 
         <!-- Row 1: Personal Stats -->
         <section class="emp-stats-row">
           <div class="emp-stat-card glass-card">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <span class="emp-stat-label">CPU Usage</span>
-              <div class="emp-stat-icon cpu-icon"><i data-lucide="zap"></i></div>
+            <div class="emp-stat-icon cpu-icon">⚡</div>
+            <div class="emp-stat-info">
+              <div class="emp-stat-label">CPU Usage</div>
+              <div class="emp-stat-value" id="statCpu">—</div>
             </div>
-            <div class="emp-stat-value" id="statCpu">—</div>
             <div class="emp-stat-bar-wrap">
               <div class="emp-stat-bar" id="cpuBar"></div>
             </div>
           </div>
 
           <div class="emp-stat-card glass-card">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <span class="emp-stat-label">RAM Usage</span>
-              <div class="emp-stat-icon ram-icon"><i data-lucide="memory-stick"></i></div>
+            <div class="emp-stat-icon ram-icon">💾</div>
+            <div class="emp-stat-info">
+              <div class="emp-stat-label">RAM Usage</div>
+              <div class="emp-stat-value" id="statRam">—</div>
             </div>
-            <div class="emp-stat-value" id="statRam">—</div>
             <div class="emp-stat-bar-wrap">
               <div class="emp-stat-bar ram-bar" id="ramBar"></div>
             </div>
           </div>
 
           <div class="emp-stat-card glass-card">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <span class="emp-stat-label">Monthly Cost</span>
-              <div class="emp-stat-icon cost-icon"><i data-lucide="circle-dollar-sign"></i></div>
+            <div class="emp-stat-icon cost-icon">💰</div>
+            <div class="emp-stat-info">
+              <div class="emp-stat-label">Monthly Cost</div>
+              <div class="emp-stat-value" id="statCost">—</div>
             </div>
-            <div class="emp-stat-value" id="statCost">—</div>
             <div class="emp-stat-label" style="font-size:0.75rem;opacity:0.6;margin-top:4px;" id="statInstance">—</div>
           </div>
 
           <div class="emp-stat-card glass-card">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <span class="emp-stat-label">Server Status</span>
-              <div class="emp-stat-icon status-icon" id="statusIconWrap"><i data-lucide="check-circle"></i></div>
+            <div class="emp-stat-icon status-icon">🟢</div>
+            <div class="emp-stat-info">
+              <div class="emp-stat-label">Server Status</div>
+              <div class="emp-stat-value" id="statStatus">—</div>
             </div>
-            <div class="emp-stat-value" id="statStatus">—</div>
           </div>
         </section>
 
@@ -156,7 +180,7 @@
 
           <!-- Personal CPU Gauge -->
           <div class="emp-gauge-card glass-card">
-            <h3 class="section-title" style="display:flex;align-items:center;gap:8px;"><i data-lucide="bar-chart-2"></i> Your Resource Efficiency</h3>
+            <h3 class="section-title">📊 Your Resource Efficiency</h3>
             <div class="emp-gauge-wrap">
               <svg viewBox="0 0 200 200" class="gauge-svg emp-gauge-svg">
                 <circle class="gauge-bg-circle" cx="100" cy="100" r="80" />
@@ -173,7 +197,7 @@
 
           <!-- Team Overview -->
           <div class="emp-team-card glass-card">
-            <h3 class="section-title" style="display:flex;align-items:center;gap:8px;"><i data-lucide="users"></i> <span id="teamName">Your Team</span> Overview</h3>
+            <h3 class="section-title">🏢 <span id="teamName">Your Team</span> Overview</h3>
             <div class="emp-team-stats">
               <div class="emp-team-stat">
                 <span class="ets-label">Team Avg CPU</span>
@@ -205,7 +229,7 @@
 
         <!-- Row 3: Team Members Table -->
         <section class="glass-card emp-team-table-card">
-          <h3 class="section-title" style="display:flex;align-items:center;gap:8px;"><i data-lucide="list"></i> Team Members at a Glance</h3>
+          <h3 class="section-title">👥 Team Members at a Glance</h3>
           <div class="emp-table-wrap">
             <table class="modal-table emp-member-table">
               <thead>
@@ -231,6 +255,5 @@
   </div><!-- end #empPortal -->
 
   <script type="module" src="/src/employee.js"></script>
-  <script>lucide.createIcons();</script>
 </body>
 </html>

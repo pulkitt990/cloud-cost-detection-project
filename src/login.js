@@ -23,8 +23,7 @@ const applyTheme = () => {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
   const icon = document.getElementById('loginThemeIcon');
-  if (icon) icon.innerHTML = theme === 'dark' ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>';
-  lucide.createIcons();
+  if (icon) icon.textContent = theme === 'dark' ? '🌙' : '☀️';
 };
 applyTheme();
 document.getElementById('loginThemeBtn')?.addEventListener('click', () => {
@@ -121,10 +120,9 @@ forgotBtn.addEventListener('click', async () => {
   hideError();
   try {
     await sendPasswordResetEmail(auth, email);
-    formError.innerHTML = '<i data-lucide="check-circle" style="display:inline; margin-right:4px;"></i> Reset email sent! Check your inbox.';
-    formError.classList.remove('hidden');
+    formError.textContent = '✅ Reset email sent! Check your inbox.';
+    formError.classList.remove('hidden', 'shake');
     formError.style.color = 'var(--success)';
-    lucide.createIcons();
     setTimeout(() => { formError.style.color = ''; }, 4000);
   } catch (err) { showError(friendlyError(err.code)); }
 });
