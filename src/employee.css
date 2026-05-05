@@ -209,7 +209,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
   overflow-y: auto;
 }
 
@@ -305,7 +305,7 @@
 .emp-detail-row {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 24px;
+  gap: 32px;
   align-items: start;
 }
 @media (max-width: 900px) {
