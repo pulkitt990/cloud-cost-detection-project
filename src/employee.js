@@ -1,21 +1,7 @@
 import { companyData, getUniqueTeams } from './data.js';
 import { analyzeResources } from './optimizer.js';
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
-
-// ── Firebase config (same project as admin portal) ────────────────────────
-const firebaseConfig = {
-  apiKey: "AIzaSyChGIzwJAHnSWLQRsd4m8_mtwj903IRwmg",
-  authDomain: "cloud-cost-control-fc86e.firebaseapp.com",
-  projectId: "cloud-cost-control-fc86e",
-  storageBucket: "cloud-cost-control-fc86e.firebasestorage.app",
-  messagingSenderId: "999151125411",
-  appId: "1:999151125411:web:62dc2ff8b4822485a1d016",
-};
-
-const app = initializeApp(firebaseConfig, 'employee-portal');
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
+import { auth } from './firebase.js';
+import { signOut, onAuthStateChanged } from 'firebase/auth';
 
 // ── Theme ─────────────────────────────────────────────────────────────────
 const savedTheme = localStorage.getItem('cloudsense-theme') || 'dark';
