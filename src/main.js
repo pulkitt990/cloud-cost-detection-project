@@ -668,7 +668,7 @@ function simulateLiveTraffic() {
         if (newDisabled.length > originalLen) {
           state.disabledInstances = newDisabled;
           const stoppedCount = newDisabled.length - originalLen;
-          showToast(`🤖 Auto-Pilot suspended ${stoppedCount} idle instances.`);
+          showToast(`Auto-Pilot suspended ${stoppedCount} idle instances.`);
           renderTeamCards();
           renderEmployeeList();
         }
@@ -840,7 +840,7 @@ function startDashboard() {
     autopilotToggle.addEventListener('change', (e) => {
       autopilotEnabled = e.target.checked;
       if (autopilotEnabled) {
-        showToast('🤖 Autonomous Auto-Pilot Engaged. Scanning infrastructure 24/7...');
+        showToast('Autonomous Auto-Pilot Engaged. Scanning infrastructure 24/7...');
       } else {
         showToast('Auto-Pilot Disengaged. Resuming manual monitoring.');
       }
