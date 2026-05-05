@@ -213,13 +213,13 @@ function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
  // Status badge
  const badge = document.getElementById('empStatusBadge');
  if (isIdle) {
- badge.textContent = '️ Low Usage';
+ badge.textContent = 'Low Usage';
  badge.className = 'emp-status-badge badge-warning';
  } else if (emp.cpu_usage >= 70) {
- badge.textContent = ' High Load';
+ badge.textContent = 'High Load';
  badge.className = 'emp-status-badge badge-danger';
  } else {
- badge.textContent = ' Healthy';
+ badge.textContent = 'Healthy';
  badge.className = 'emp-status-badge badge-success';
  }
 
@@ -228,7 +228,7 @@ function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
  document.getElementById('statRam').textContent = `${emp.ram_usage}%`;
  document.getElementById('statCost').textContent = `$${emp.monthly_cost}/mo`;
  document.getElementById('statInstance').textContent = emp.instance_type;
- document.getElementById('statStatus').textContent = isIdle ? '🟡 Low Usage' : '🟢 Active';
+ document.getElementById('statStatus').textContent = isIdle ? 'Low Usage' : 'Active';
 
  // Progress bars
  const cpuBar = document.getElementById('cpuBar');
@@ -256,13 +256,13 @@ function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
 
  const gaugeNote = document.getElementById('empGaugeNote');
  if (isIdle) {
- gaugeNote.textContent = '️ Your server is running at very low CPU. Consider discussing workload redistribution with your team lead.';
+ gaugeNote.textContent = 'Your server is running at very low CPU. Consider discussing workload redistribution with your team lead.';
  gaugeNote.className = 'emp-gauge-note note-warning';
  } else if (emp.cpu_usage >= 80) {
- gaugeNote.textContent = ' High CPU usage detected! Your server is under heavy load. Consider optimizing your processes.';
+ gaugeNote.textContent = 'High CPU usage detected! Your server is under heavy load. Consider optimizing your processes.';
  gaugeNote.className = 'emp-gauge-note note-danger';
  } else {
- gaugeNote.textContent = ' Your server is performing efficiently. Keep it up!';
+ gaugeNote.textContent = 'Your server is performing efficiently. Keep it up!';
  gaugeNote.className = 'emp-gauge-note note-success';
  }
 
@@ -291,7 +291,7 @@ function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
  tbody.innerHTML = sorted.map(m => {
  const isMe = m.employee === emp.employee;
  const rowIdle= results.instances_to_stop.includes(m.employee);
- const statusLabel = rowIdle ? '<span class="badge-warning-inline">️ Low</span>' : '<span class="badge-success-inline">🟢 Active</span>';
+ const statusLabel = rowIdle ? '<span class="badge-warning-inline">Low</span>' : '<span class="badge-success-inline">Active</span>';
  return `
 <tr class="${isMe ? 'emp-my-row' : ''}">
 <td><strong>${m.employee}</strong>${isMe ? '<span class="you-tag">YOU</span>' : ''}</td>
