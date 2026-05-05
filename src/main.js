@@ -9,6 +9,25 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 let companyData = [..._defaultData];
 
 // ================================================
+// ANIMATED COUNTER HELPER
+// ================================================
+function animateCount(el, target, prefix = '', suffix = '', duration = 900) {
+  if (!el) return;
+  const start = 0;
+  const startTime = performance.now();
+  const update = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // easeOutQuart
+    const ease = 1 - Math.pow(1 - progress, 4);
+    const current = Math.round(start + (target - start) * ease);
+    el.textContent = `${prefix}${current.toLocaleString()}${suffix}`;
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+// ================================================
 // STATE
 // ================================================
 const state = {
@@ -86,14 +105,28 @@ function computeMetrics() {
 }
 
 
+// First load flag — only animate counters on initial paint
+let firstMetricLoad = true;
+
 // ================================================
 // UPDATE METRICS UI
 // ================================================
 function updateMetrics() {
   const m = computeMetrics();
 
-  document.getElementById('metricRunning').textContent = m.current_instances;
-  document.getElementById('metricRequired').textContent = m.instances_to_stop.length;
+  if (firstMetricLoad) {
+    // Animate on first load
+    animateCount(document.getElementById('metricRunning'), m.current_instances);
+    animateCount(document.getElementById('metricRequired'), m.instances_to_stop.length);
+    animateCount(document.getElementById('metricCost'), m.currentCost, '$');
+    animateCount(document.getElementById('metricSavings'), m.savings, '$');
+    firstMetricLoad = false;
+  } else {
+    document.getElementById('metricRunning').textContent = m.current_instances;
+    document.getElementById('metricRequired').textContent = m.instances_to_stop.length;
+    document.getElementById('metricCost').textContent = `$${m.currentCost.toLocaleString()}`;
+    document.getElementById('metricSavings').textContent = `$${m.savings.toLocaleString()}`;
+  }
 
   const idleCount = m.instances_to_stop.length;
   const deltaEl = document.getElementById('metricRequiredDelta');
@@ -111,9 +144,6 @@ function updateMetrics() {
   }
   if (sliderValue) sliderValue.textContent = m.current_instances;
   if (sliderMax) sliderMax.textContent = totalInstances;
-
-  document.getElementById('metricCost').textContent = `$${m.currentCost.toLocaleString()}`;
-  document.getElementById('metricSavings').textContent = `$${m.savings.toLocaleString()}`;
 
   const effEl = document.getElementById('metricSavingsDelta');
   const savingsPct = m.currentCost > 0 ? ((m.savings / m.currentCost) * 100).toFixed(1) : 0;
@@ -650,15 +680,49 @@ function simulateLiveTraffic() {
 setInterval(simulateLiveTraffic, 4500);
 
 // ================================================
+// LIVE TICKER
+// ================================================
+function updateTicker() {
+  const tickerEl = document.getElementById('liveTickerText');
+  if (!tickerEl) return;
+  const m = computeMetrics();
+  const active = m.current_instances;
+  const idle = m.instances_to_stop.length;
+  const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  if (idle > 0) {
+    tickerEl.textContent = `Scanning ${active} active instances — ${idle} idle flagged — Last updated ${now}`;
+  } else {
+    tickerEl.textContent = `All ${active} instances healthy — Last updated ${now}`;
+  }
+}
+setInterval(updateTicker, 4500);
+
+// ================================================
+// SPLASH SCREEN
+// ================================================
+function dismissSplash() {
+  const splash = document.getElementById('splashScreen');
+  const bar = document.getElementById('splashBar');
+  if (!splash) return;
+  // Animate the loading bar
+  setTimeout(() => { if (bar) bar.style.width = '100%'; }, 50);
+  // Fade out after bar completes
+  setTimeout(() => {
+    splash.style.opacity = '0';
+    setTimeout(() => { splash.style.display = 'none'; }, 650);
+  }, 1400);
+}
+
+// ================================================
 // INITIALIZATION
 // ================================================
 function init() {
-  // ── Auth guard ────────────────────────────────────────
   onAuthStateChanged(auth, (user) => {
     if (!user) {
       window.location.href = '/login.html';
       return;
     }
+    dismissSplash();
     startDashboard();
   });
 }
@@ -833,6 +897,53 @@ function startDashboard() {
       if (e.target === userManualModal) userManualModal.style.display = 'none';
     });
   }
+
+  // Demo Mode
+  const demoModeBtn = document.getElementById('demoModeBtn');
+  if (demoModeBtn) {
+    demoModeBtn.addEventListener('click', () => {
+      // Step 1: Reset to full data
+      companyData = [..._defaultData];
+      state.disabledTeams = [];
+      state.disabledInstances = [];
+      // Step 2: Force several instances to very low CPU to simulate idle state
+      let idleCount = 0;
+      companyData.forEach(emp => {
+        if (idleCount < 8) {
+          emp.cpu_usage = Math.floor(Math.random() * 10) + 2; // 2–11%
+          idleCount++;
+        }
+      });
+      firstMetricLoad = true; // re-trigger counter animation
+      refreshAll();
+      showToast('Demo mode active — 8 idle instances detected!');
+      
+      // Step 3: After 3.5s, auto-optimize and animate savings
+      setTimeout(() => {
+        const m = computeMetrics();
+        if (m.instances_to_stop.length > 0) {
+          state.disabledInstances = [...new Set([...state.disabledInstances, ...m.instances_to_stop])];
+          firstMetricLoad = true;
+          refreshAll();
+          showToast(`Optimization complete — ${m.instances_to_stop.length} instances suspended, saving $${Math.round(m.savings).toLocaleString()}/mo!`);
+        }
+      }, 3500);
+    });
+  }
+
+  // Keyboard shortcut: R = Reset environment
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'r' || e.key === 'R') {
+      // Don't fire if typing in an input
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+      state.disabledTeams = [];
+      state.disabledInstances = [];
+      companyData = [..._defaultData];
+      firstMetricLoad = true;
+      refreshAll();
+      showToast('Environment reset to defaults (keyboard shortcut R)');
+    }
+  });
 
   // Right panel open / close
   const panelOpenBtn  = document.getElementById('panelOpenBtn');

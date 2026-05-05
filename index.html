@@ -19,6 +19,25 @@
 
 <body>
 
+  <!-- ===== SPLASH SCREEN ===== -->
+  <div id="splashScreen" style="position:fixed; inset:0; z-index:99999; background:var(--bg-primary); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; transition:opacity 0.6s ease;">
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+      <defs>
+        <linearGradient id="splashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#6c5ce7"/>
+          <stop offset="100%" stop-color="#00cec9"/>
+        </linearGradient>
+      </defs>
+      <path d="M48 40H20C14.5 40 10 35.5 10 30C10 25 13.8 20.8 18.7 20.1C19.8 14.4 24.9 10 31 10C37.4 10 42.7 14.8 43.5 21C47.1 21.7 50 24.9 50 28.8C50 34.9 46.6 40 48 40Z" fill="url(#splashGrad)" opacity="0.85"/>
+      <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#splashGrad)"/>
+    </svg>
+    <div style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.6rem; font-weight:800; background:linear-gradient(135deg,#6c5ce7,#00cec9); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">CloudSense</div>
+    <div style="width:160px; height:3px; background:var(--border); border-radius:2px; overflow:hidden;">
+      <div id="splashBar" style="height:100%; width:0%; background:linear-gradient(90deg,#6c5ce7,#00cec9); border-radius:2px; transition:width 1.2s ease;"></div>
+    </div>
+    <div style="font-size:0.8rem; color:var(--text-secondary); font-family:'Inter',sans-serif;">Initialising infrastructure scan...</div>
+  </div>
+
   <!-- ===== TOP NAVBAR ===== -->
   <nav class="top-nav" id="topNav">
     <div class="nav-brand">
@@ -123,6 +142,10 @@
           <span class="btn-icon">📥</span> Export Executive Report
         </button>
 
+        <button class="action-btn" id="demoModeBtn" style="margin-top: 16px; width: 100%; background: linear-gradient(135deg, rgba(108,92,231,0.15), rgba(0,206,201,0.15)); border: 1px solid var(--accent-1); color: var(--accent-1); font-weight: 700;">
+          <span class="btn-icon">▶</span> Run Live Demo
+        </button>
+
         <button class="action-btn" id="userManualBtn" style="margin-top: 16px; width: 100%; background: var(--border); border: 1px solid var(--border); color: var(--text-secondary);">
           <span class="btn-icon">📖</span> User Manual
         </button>
@@ -145,6 +168,10 @@
         <span class="status-dot"></span>
         Intelligent Cloud Cost &amp; Infrastructure Management
       </p>
+      <div id="liveTicker" style="display:flex; align-items:center; gap:8px; margin-top:12px; font-size:0.78rem; color:var(--text-secondary); font-family:'Inter',sans-serif;">
+        <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#00b894; animation:pulse 2s infinite; flex-shrink:0;"></span>
+        <span id="liveTickerText">Scanning infrastructure in real-time...</span>
+      </div>
     </header>
 
     <!-- Metric Cards -->
