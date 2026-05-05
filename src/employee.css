@@ -203,13 +203,13 @@
 /* ── Main Content ──────────────────────────── */
 .emp-main {
   flex: 1;
-  padding: 32px;
+  padding: 40px 48px;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 40px;
   overflow-y: auto;
 }
 
@@ -218,18 +218,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 32px;
-  border-radius: 16px;
+  padding: 32px 40px;
+  border-radius: 20px;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 20px;
 }
 .emp-welcome-text h1 {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 800;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
-.emp-welcome-text p { color: var(--text-secondary); font-size: 0.9rem; }
+.emp-welcome-text p { color: var(--text-secondary); font-size: 0.95rem; }
 .emp-status-badge {
   padding: 10px 24px;
   border-radius: 50px;
@@ -261,14 +261,14 @@
 .emp-stats-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 32px;
+  gap: 24px;
 }
 .emp-stat-card {
-  padding: 20px;
-  border-radius: 16px;
+  padding: 28px 24px;
+  border-radius: 18px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 .emp-stat-icon {
   font-size: 1.5rem;
@@ -305,7 +305,7 @@
 .emp-detail-row {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 32px;
+  gap: 24px;
   align-items: start;
 }
 @media (max-width: 900px) {
@@ -315,11 +315,11 @@
 /* Gauge card */
 .emp-gauge-card {
   border-radius: 20px;
-  padding: 28px;
+  padding: 36px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 .emp-gauge-wrap {
   position: relative;
@@ -354,13 +354,13 @@
 /* Team card */
 .emp-team-card {
   border-radius: 20px;
-  padding: 28px;
+  padding: 36px;
 }
 .emp-team-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 16px;
-  margin-top: 16px;
+  margin-top: 20px;
 }
 .emp-team-stat {
   background: var(--bg-input);
@@ -386,7 +386,7 @@
 /* ── Team Members Table ────────────────────── */
 .emp-team-table-card {
   border-radius: 20px;
-  padding: 28px;
+  padding: 36px;
 }
 .emp-table-wrap {
   overflow-x: auto;
