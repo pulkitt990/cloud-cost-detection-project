@@ -119,9 +119,12 @@
         </a>
         <div id="csvStatus" class="csv-status" style="display:none;"></div>
         
-        <!-- NEW EXPORT BUTTON -->
         <button class="action-btn" id="exportReportBtn" style="margin-top: 24px; width: 100%; background: var(--border); border: 1px solid var(--accent-1); color: var(--text-primary);">
           <span class="btn-icon">📥</span> Export Executive Report
+        </button>
+
+        <button class="action-btn" id="userManualBtn" style="margin-top: 16px; width: 100%; background: var(--border); border: 1px solid var(--border); color: var(--text-secondary);">
+          <span class="btn-icon">📖</span> User Manual
         </button>
 
         <button class="action-btn" id="adminSignoutBtn" style="margin-top: 16px; width: 100%; background: var(--border); border: 1px solid var(--danger); color: var(--danger);">
@@ -278,6 +281,111 @@
     </div>
     <div class="modal-body" id="metricModalBody">
       <!-- Table populated by JS -->
+    </div>
+  </div>
+
+  <!-- ===== USER MANUAL MODAL ===== -->
+  <div id="userManualModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.65); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:24px;">
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:24px; width:100%; max-width:760px; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 32px 80px rgba(0,0,0,0.5);">
+      
+      <!-- Header -->
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:28px 32px; border-bottom:1px solid var(--border); flex-shrink:0;">
+        <div>
+          <h2 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.4rem; font-weight:800; color:var(--text-primary); margin:0;">CloudSense Admin Console</h2>
+          <p style="color:var(--text-secondary); font-size:0.85rem; margin:4px 0 0;">User Manual &amp; Feature Reference Guide</p>
+        </div>
+        <button id="userManualClose" style="background:var(--bg-input); border:1px solid var(--border); border-radius:10px; padding:8px 14px; color:var(--text-secondary); font-size:1rem; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Scrollable Body -->
+      <div style="overflow-y:auto; padding:32px; display:flex; flex-direction:column; gap:28px;">
+
+        <!-- Section 1 -->
+        <div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:700; color:var(--accent-1); margin:0 0 12px; display:flex; align-items:center; gap:8px;">📊 Dashboard Overview</h3>
+          <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.75; margin:0;">The top four metric cards give you a real-time snapshot of your cloud infrastructure. <strong style="color:var(--text-primary);">Active Instances</strong> shows how many servers are currently running. <strong style="color:var(--text-primary);">Recommended Shutdown</strong> flags instances whose CPU is below 15% — a reliable signal of waste. <strong style="color:var(--text-primary);">Current Monthly Cost</strong> is the live spend across all running instances. <strong style="color:var(--text-primary);">Potential Savings</strong> is the dollar difference between your current spend and what you would pay after applying all recommendations.</p>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border);">
+
+        <!-- Section 2 -->
+        <div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:700; color:var(--accent-1); margin:0 0 12px; display:flex; align-items:center; gap:8px;">📈 Charts &amp; Visualizations</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Average Team CPU Utilization</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">A bar chart comparing CPU usage across all teams. Teams with very low bars are prime candidates for resource consolidation.</p>
+            </div>
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Resource Heatmap</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">A horizontal stacked bar showing individual employee CPU usage grouped by team. Useful for spotting which team has the highest workload density.</p>
+            </div>
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Cost Forecast</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">Projects your monthly spend over the next 5 months. The <em>Optimized Path</em> line shows your projected cost if all idle instances are shut down today.</p>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border);">
+
+        <!-- Section 3 -->
+        <div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:700; color:var(--accent-1); margin:0 0 12px; display:flex; align-items:center; gap:8px;">⚙️ Admin Console Controls</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Infrastructure Simulation Slider</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">Drag the slider to simulate running fewer instances. The dashboard updates in real-time to show the cost and efficiency impact of any hypothetical configuration.</p>
+            </div>
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Reset Environment</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">Restores all instances to their default active state and clears any CSV data you may have uploaded.</p>
+            </div>
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Upload Real Data (CSV)</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">Replace the demo data with your own. The CSV must have columns: <code style="background:rgba(124,111,247,0.15); color:var(--accent-1); padding:2px 6px; border-radius:4px;">team, employee, instance_type, monthly_cost, cpu_usage, ram_usage</code>. Download the template for the exact format.</p>
+            </div>
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Export Executive Report</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">Downloads a CSV summary of all currently active instances, their costs, and usage — ready for a board presentation or finance review.</p>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border);">
+
+        <!-- Section 4 -->
+        <div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:700; color:var(--accent-1); margin:0 0 12px; display:flex; align-items:center; gap:8px;">🤖 Optimization &amp; Auto-Pilot</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Auto-Optimize</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">A one-click action that immediately suspends all instances flagged as idle (CPU &lt; 15%). Run this to instantly capture your maximum projected savings.</p>
+            </div>
+            <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+              <strong style="color:var(--text-primary); font-size:0.88rem;">Autonomous Auto-Pilot</strong>
+              <p style="color:var(--text-secondary); font-size:0.84rem; margin:6px 0 0; line-height:1.6;">When enabled, the system monitors CPU usage every 4.5 seconds and automatically suspends any newly-idle instance. A toast notification confirms each action taken.</p>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border);">
+
+        <!-- Section 5 -->
+        <div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:700; color:var(--accent-1); margin:0 0 12px; display:flex; align-items:center; gap:8px;">👥 Team &amp; Instance Management</h3>
+          <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.75; margin:0;">The <strong style="color:var(--text-primary);">Management tab</strong> lets you control resources at two levels. Use <strong style="color:var(--text-primary);">Team Cards</strong> to stop or start all instances for an entire team at once. Use the <strong style="color:var(--text-primary);">Employee List</strong> to suspend or resume individual instances. All changes reflect immediately across all charts and metrics.</p>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border);">
+
+        <!-- Section 6 -->
+        <div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:700; color:var(--accent-1); margin:0 0 12px; display:flex; align-items:center; gap:8px;">🔐 Portal Access</h3>
+          <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.75; margin:0;">CloudSense supports two portals. <strong style="color:var(--text-primary);">Admin Console</strong> provides full visibility and control over all teams and instances. <strong style="color:var(--text-primary);">Employee Portal</strong> gives each employee a personal, read-only view of their own server metrics and team overview. Employees authenticate via Google SSO and then enter a personal PIN to access their data.</p>
+        </div>
+
+      </div>
     </div>
   </div>
 

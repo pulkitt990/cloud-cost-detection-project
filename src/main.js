@@ -818,6 +818,22 @@ function startDashboard() {
     });
   }
 
+  // User Manual
+  const userManualBtn   = document.getElementById('userManualBtn');
+  const userManualModal = document.getElementById('userManualModal');
+  const userManualClose = document.getElementById('userManualClose');
+  if (userManualBtn && userManualModal) {
+    userManualBtn.addEventListener('click', () => {
+      userManualModal.style.display = 'flex';
+    });
+    userManualClose?.addEventListener('click', () => {
+      userManualModal.style.display = 'none';
+    });
+    userManualModal.addEventListener('click', (e) => {
+      if (e.target === userManualModal) userManualModal.style.display = 'none';
+    });
+  }
+
   // Right panel open / close
   const panelOpenBtn  = document.getElementById('panelOpenBtn');
   const panelCloseBtn = document.getElementById('panelCloseBtn');
