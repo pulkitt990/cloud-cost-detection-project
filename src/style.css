@@ -134,8 +134,8 @@ body {
 
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -143,11 +143,15 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-1);
-  border-radius: 10px;
+  background: rgba(124, 135, 168, 0.3); /* subtle grey/purple transparent */
+  border-radius: 4px;
 }
 
-/* ===/* ===== DARK MODE AMBIENT GLOW ===== */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 135, 168, 0.5);
+}
+
+/* ===== DARK MODE AMBIENT GLOW ===== */
 [data-theme="dark"] body {
   background:
     radial-gradient(ellipse 70% 50% at 15% 0%,  rgba(108, 92, 231, 0.08) 0%, transparent 60%),
