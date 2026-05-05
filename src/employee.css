@@ -261,7 +261,7 @@
 .emp-stats-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  gap: 32px;
 }
 .emp-stat-card {
   padding: 20px;
