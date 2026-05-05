@@ -11,18 +11,22 @@ let companyData = [..._defaultData];
 // ================================================
 // ANIMATED COUNTER HELPER
 // ================================================
-function animateCount(el, target, prefix = '', suffix = '', duration = 900) {
+function animateCount(el, target, prefix = '', suffix = '', duration = 1200) {
   if (!el) return;
-  const start = 0;
+  el.style.willChange = 'contents';
   const startTime = performance.now();
   const update = (now) => {
     const elapsed = now - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    // easeOutQuart
-    const ease = 1 - Math.pow(1 - progress, 4);
-    const current = Math.round(start + (target - start) * ease);
+    // Smooth cubic easeOut
+    const ease = 1 - (1 - progress) * (1 - progress) * (1 - progress);
+    const current = Math.round(target * ease);
     el.textContent = `${prefix}${current.toLocaleString()}${suffix}`;
-    if (progress < 1) requestAnimationFrame(update);
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.style.willChange = 'auto';
+    }
   };
   requestAnimationFrame(update);
 }
