@@ -178,7 +178,7 @@ function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
 
   // Welcome banner
   const firstName = emp.employee.split(' ')[0].replace('Dr.', '').trim();
-  document.getElementById('empGreeting').textContent  = `Welcome back, ${firstName}! 👋`;
+  document.getElementById('empGreeting').textContent  = `Welcome back, ${firstName}!`;
   document.getElementById('empSubtitle').textContent  = `${emp.team} Team · ${emp.instance_type}`;
 
   // Status badge
