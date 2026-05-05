@@ -171,7 +171,7 @@ function renderProfile(employeeName, welcomeDiv, selectPrompt, empContent) {
   // Hide select prompt, show content
   selectPrompt.style.display = 'none';
   welcomeDiv.style.display = 'flex';
-  empContent.style.display = 'block';
+  empContent.style.display = 'flex';
 
   const results = analyzeResources(companyData);
   const isIdle  = results.instances_to_stop.includes(emp.employee);
