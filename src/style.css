@@ -1728,6 +1728,41 @@ body {
 [data-theme="dark"] .login-right-brand { color: #eef0fa; }
 
 /* Greeting */
+/* ===== ROLE SELECTOR ===== */
+.login-role-selector {
+  display: flex;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.role-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-btn:hover {
+  color: var(--text-primary);
+}
+
+.role-btn.active {
+  background: var(--bg-card);
+  color: var(--accent-1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
 .login-greeting { margin-bottom: 4px; }
 
 .login-welcome {

@@ -14,7 +14,14 @@ const googleProvider = new GoogleAuthProvider();
 
 // ── Redirect if already logged in ──────────────────────
 onAuthStateChanged(auth, (user) => {
-  if (user) window.location.href = '/';
+  if (user) {
+    const role = localStorage.getItem('cloudsense-role') || 'admin';
+    if (role === 'employee') {
+      window.location.href = '/employee.html';
+    } else {
+      window.location.href = '/';
+    }
+  }
 });
 
 // ── Theme ───────────────────────────────────────────────
@@ -46,9 +53,13 @@ const toggleText  = document.getElementById('toggleText');
 const forgotBtn   = document.getElementById('forgotBtn');
 const subtitle    = document.getElementById('loginSubtitle');
 const googleBtn   = document.getElementById('googleSignInBtn');
+const roleBtns    = document.querySelectorAll('.role-btn');
+const authDivider = document.querySelector('.auth-divider');
+const authToggleContainer = document.getElementById('authToggleContainer');
 
 // ── State ────────────────────────────────────────────────
 let isSignUp = false;
+let currentRole = localStorage.getItem('cloudsense-role') || 'admin';
 
 // ── Helpers ──────────────────────────────────────────────
 const showError = (msg) => {
@@ -82,12 +93,48 @@ const setMode = (signUp) => {
   btnText.textContent     = signUp ? 'Create Account' : 'Sign In';
   toggleText.textContent  = signUp ? 'Already have an account?' : "Don't have an account?";
   toggleBtn.textContent   = signUp ? 'Sign In' : 'Create Account';
-  subtitle.textContent    = signUp ? 'Create your admin account' : 'Sign in to your admin panel';
+  if (currentRole === 'admin') {
+    subtitle.textContent    = signUp ? 'Create your admin account' : 'Sign in to your admin panel';
+  } else {
+    subtitle.textContent    = 'Sign in with your company Google account';
+  }
   nameGroup.classList.toggle('hidden', !signUp);
   forgotBtn.classList.toggle('hidden', signUp);
   hideError();
 };
 toggleBtn.addEventListener('click', () => setMode(!isSignUp));
+
+// ── Role Toggle ──────────────────────────────────────────
+const applyRole = (role) => {
+  currentRole = role;
+  localStorage.setItem('cloudsense-role', role);
+  
+  // Update buttons
+  roleBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.role === role));
+  
+  if (role === 'admin') {
+    form.style.display = 'block';
+    authDivider.style.display = 'flex';
+    authToggleContainer.style.display = 'flex';
+    document.getElementById('loginWelcome').textContent = 'Welcome back';
+    subtitle.textContent = isSignUp ? 'Create your admin account' : 'Sign in to your admin panel';
+  } else {
+    // Employee mode: SSO only
+    form.style.display = 'none';
+    authDivider.style.display = 'none';
+    authToggleContainer.style.display = 'none';
+    document.getElementById('loginWelcome').textContent = 'Employee Portal';
+    subtitle.textContent = 'Sign in with your company Google account';
+  }
+  hideError();
+};
+
+roleBtns.forEach(btn => {
+  btn.addEventListener('click', () => applyRole(btn.dataset.role));
+});
+
+// Initialize role view
+applyRole(currentRole);
 
 // ── Form submit ──────────────────────────────────────────
 form.addEventListener('submit', async (e) => {
@@ -133,7 +180,13 @@ googleBtn?.addEventListener('click', async () => {
   googleBtn.disabled = true;
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    if (result.user) window.location.href = '/';
+    if (result.user) {
+      if (currentRole === 'employee') {
+        window.location.href = '/employee.html';
+      } else {
+        window.location.href = '/';
+      }
+    }
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') showError(friendlyError(err.code));
     googleBtn.disabled = false;

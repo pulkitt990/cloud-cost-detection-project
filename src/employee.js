@@ -35,21 +35,8 @@ if (themeBtn) {
 
 // ── Auth elements ──────────────────────────────────────────────────────────
 const authGate     = document.getElementById('authGate');
-const loginPrompt  = document.getElementById('loginPrompt');
 const empPortal    = document.getElementById('empPortal');
-const empGoogleBtn = document.getElementById('empGoogleBtn');
 const empSignoutBtn= document.getElementById('empSignoutBtn');
-const loginError   = document.getElementById('empLoginError');
-
-empGoogleBtn?.addEventListener('click', async () => {
-  try {
-    loginError.style.display = 'none';
-    await signInWithPopup(auth, googleProvider);
-  } catch (err) {
-    loginError.style.display = 'block';
-    loginError.textContent = `Sign-in failed: ${err.message}`;
-  }
-});
 
 empSignoutBtn?.addEventListener('click', async () => {
   await signOut(auth);
@@ -59,10 +46,8 @@ empSignoutBtn?.addEventListener('click', async () => {
 onAuthStateChanged(auth, (user) => {
   authGate.style.display = 'none';
   if (!user) {
-    loginPrompt.style.display = 'flex';
-    empPortal.style.display = 'none';
+    window.location.href = '/login.html';
   } else {
-    loginPrompt.style.display = 'none';
     empPortal.style.display = 'flex';
     initPortal(user);
   }
