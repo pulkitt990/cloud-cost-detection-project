@@ -2,282 +2,282 @@
 <html lang="en" data-theme="light">
 
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description"
- content="CloudSense — Intelligent Infrastructure Monitoring &amp; Optimization Dashboard" />
-<title>CloudSense</title>
-<link rel="icon" type="image/svg+xml"
- href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
- href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
- rel="stylesheet" />
-<link rel="stylesheet" href="/src/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="CloudSense — Intelligent Infrastructure Monitoring &amp; Optimization Dashboard" />
+  <title>CloudSense</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
 </head>
 
 <body>
 
-<!-- ===== TOP NAVBAR ===== -->
-<nav class="top-nav" id="topNav">
-<div class="nav-brand">
-<svg class="nav-logo" width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<linearGradient id="navCloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" stop-color="#6c5ce7"/>
-<stop offset="100%" stop-color="#00cec9"/>
-</linearGradient>
-</defs>
-<path d="M48 40H20C14.5 40 10 35.5 10 30C10 25 13.8 20.8 18.7 20.1C19.8 14.4 24.9 10 31 10C37.4 10 42.7 14.8 43.5 21C47.1 21.7 50 24.9 50 28.8C50 34.9 46.6 40 48 40Z" fill="url(#navCloudGrad)" opacity="0.85"/>
-<path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#navCloudGrad)"/>
-</svg>
-<span class="nav-brand-name">CloudSense</span>
-<span class="nav-tagline">Infrastructure Intelligence</span>
-</div>
+  <!-- ===== TOP NAVBAR ===== -->
+  <nav class="top-nav" id="topNav">
+    <div class="nav-brand">
+      <svg class="nav-logo" width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="navCloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6c5ce7"/>
+            <stop offset="100%" stop-color="#00cec9"/>
+          </linearGradient>
+        </defs>
+        <path d="M48 40H20C14.5 40 10 35.5 10 30C10 25 13.8 20.8 18.7 20.1C19.8 14.4 24.9 10 31 10C37.4 10 42.7 14.8 43.5 21C47.1 21.7 50 24.9 50 28.8C50 34.9 46.6 40 48 40Z" fill="url(#navCloudGrad)" opacity="0.85"/>
+        <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#navCloudGrad)"/>
+      </svg>
+      <span class="nav-brand-name">CloudSense</span>
+      <span class="nav-tagline">Infrastructure Intelligence</span>
+    </div>
 
-<div class="nav-right">
-<button class="panel-open-btn" id="panelOpenBtn" aria-label="Open Admin Console">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-<circle cx="12" cy="12" r="3"/>
-<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-</svg>
-<span class="btn-live-dot"></span>
-<span>Admin Console</span>
-</button>
-</div>
-</nav>
+    <div class="nav-right">
+      <button class="panel-open-btn" id="panelOpenBtn" aria-label="Open Admin Console">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span class="btn-live-dot"></span>
+        <span>Admin Console</span>
+      </button>
+    </div>
+  </nav>
 
-<!-- ===== BACKDROP ===== -->
-<div class="panel-backdrop" id="panelBackdrop"></div>
+  <!-- ===== BACKDROP ===== -->
+  <div class="panel-backdrop" id="panelBackdrop"></div>
 
-<!-- ===== RIGHT DRAWER PANEL ===== -->
-<aside class="right-panel" id="rightPanel" aria-label="Admin Console Panel">
-<div class="panel-header">
-<div class="panel-brand">
-<div class="panel-brand-icon">
-<svg class="cloud-icon-anim" width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" stop-color="#6c5ce7"/>
-<stop offset="100%" stop-color="#00cec9"/>
-</linearGradient>
-</defs>
-<path d="M48 40H20C14.5 40 10 35.5 10 30C10 25 13.8 20.8 18.7 20.1C19.8 14.4 24.9 10 31 10C37.4 10 42.7 14.8 43.5 21C47.1 21.7 50 24.9 50 28.8C50 34.9 46.6 40 48 40Z" fill="url(#cloudGrad)" opacity="0.9"/>
-<path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#cloudGrad)"/>
-</svg>
-</div>
-<h2 class="brand-title">Admin Console</h2>
-</div>
-<button class="panel-close-btn" id="panelCloseBtn" aria-label="Close panel"></button>
-</div>
+  <!-- ===== RIGHT DRAWER PANEL ===== -->
+  <aside class="right-panel" id="rightPanel" aria-label="Admin Console Panel">
+    <div class="panel-header">
+      <div class="panel-brand">
+        <div class="panel-brand-icon">
+          <svg class="cloud-icon-anim" width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6c5ce7"/>
+                <stop offset="100%" stop-color="#00cec9"/>
+              </linearGradient>
+            </defs>
+            <path d="M48 40H20C14.5 40 10 35.5 10 30C10 25 13.8 20.8 18.7 20.1C19.8 14.4 24.9 10 31 10C37.4 10 42.7 14.8 43.5 21C47.1 21.7 50 24.9 50 28.8C50 34.9 46.6 40 48 40Z" fill="url(#cloudGrad)" opacity="0.9"/>
+            <path d="M50 40H26C21.6 40 18 36.4 18 32C18 28 20.9 24.6 24.7 24C25.6 19.5 29.7 16 34.5 16C39.6 16 43.9 19.8 44.5 24.8C47.6 25.3 50 28 50 31.2C50 34.9 52 40 50 40Z" fill="url(#cloudGrad)"/>
+          </svg>
+        </div>
+        <h2 class="brand-title">Admin Console</h2>
+      </div>
+      <button class="panel-close-btn" id="panelCloseBtn" aria-label="Close panel">✕</button>
+    </div>
 
-<div class="panel-body">
-<!-- Theme Toggle -->
-<div class="theme-toggle-card" id="themeToggleCard">
-<span class="theme-icon" id="themeIcon"></span>
-<span class="theme-label" id="themeLabel">Dark Mode</span>
-<button class="theme-switch" id="themeSwitch" aria-label="Toggle theme">
-<span class="theme-switch-knob" id="themeSwitchKnob"></span>
-</button>
-</div>
+    <div class="panel-body">
+      <!-- Theme Toggle -->
+      <div class="theme-toggle-card" id="themeToggleCard">
+        <span class="theme-icon" id="themeIcon">🌙</span>
+        <span class="theme-label" id="themeLabel">Dark Mode</span>
+        <button class="theme-switch" id="themeSwitch" aria-label="Toggle theme">
+          <span class="theme-switch-knob" id="themeSwitchKnob"></span>
+        </button>
+      </div>
 
-<div class="sidebar-divider"></div>
+      <div class="sidebar-divider"></div>
 
-<h3 class="sidebar-section-title">Infrastructure Simulation</h3>
+      <h3 class="sidebar-section-title">Infrastructure Simulation</h3>
 
-<div class="slider-container">
-<label class="slider-label" for="instanceSlider">
- Active Instances
-<span class="slider-value" id="sliderValue">40</span>
-</label>
-<input type="range" id="instanceSlider" class="luxury-slider" min="1" max="40" value="40" />
-<div class="slider-range-labels">
-<span>1</span>
-<span id="sliderMax">40</span>
-</div>
-</div>
+      <div class="slider-container">
+        <label class="slider-label" for="instanceSlider">
+          Active Instances
+          <span class="slider-value" id="sliderValue">40</span>
+        </label>
+        <input type="range" id="instanceSlider" class="luxury-slider" min="1" max="40" value="40" />
+        <div class="slider-range-labels">
+          <span>1</span>
+          <span id="sliderMax">40</span>
+        </div>
+      </div>
 
-<div class="sidebar-divider"></div>
+      <div class="sidebar-divider"></div>
 
-<button class="sidebar-btn reset-btn" id="resetBtn">
-<span class="btn-icon"></span>
- Reset Environment
-</button>
+      <button class="sidebar-btn reset-btn" id="resetBtn">
+        <span class="btn-icon">🔄</span>
+        Reset Environment
+      </button>
 
-<div class="sidebar-divider"></div>
+      <div class="sidebar-divider"></div>
 
-<div class="csv-upload-section">
-<div class="csv-title"> Upload Your Real Data</div>
-<p class="csv-desc">Upload a CSV with your team's actual resource usage to replace the default data.</p>
-<label class="csv-upload-label" for="csvFileInput">
-<span class="btn-icon">⬆️</span> Upload CSV File
-<input type="file" id="csvFileInput" accept=".csv" hidden />
-</label>
-<a href="/employee_data_template.csv" download class="csv-template-link">
- ⬇️ Download template CSV
-</a>
-<div id="csvStatus" class="csv-status" style="display:none;"></div>
- 
-<!-- NEW EXPORT BUTTON -->
-<button class="action-btn" id="exportReportBtn" style="margin-top: 24px; width: 100%; background: var(--border); border: 1px solid var(--accent-1); color: var(--text-primary);">
-<span class="btn-icon"></span> Export Executive Report
-</button>
-</div>
-</div>
-</aside>
+      <div class="csv-upload-section">
+        <div class="csv-title">📂 Upload Your Real Data</div>
+        <p class="csv-desc">Upload a CSV with your team's actual resource usage to replace the default data.</p>
+        <label class="csv-upload-label" for="csvFileInput">
+          <span class="btn-icon">⬆️</span> Upload CSV File
+          <input type="file" id="csvFileInput" accept=".csv" hidden />
+        </label>
+        <a href="/employee_data_template.csv" download class="csv-template-link">
+          ⬇️ Download template CSV
+        </a>
+        <div id="csvStatus" class="csv-status" style="display:none;"></div>
+        
+        <!-- NEW EXPORT BUTTON -->
+        <button class="action-btn" id="exportReportBtn" style="margin-top: 24px; width: 100%; background: var(--border); border: 1px solid var(--accent-1); color: var(--text-primary);">
+          <span class="btn-icon">📥</span> Export Executive Report
+        </button>
+      </div>
+    </div>
+  </aside>
 
-<!-- ===== MAIN CONTENT (full width) ===== -->
-<main class="main-content">
+  <!-- ===== MAIN CONTENT (full width) ===== -->
+  <main class="main-content">
 
-<!-- Header -->
-<header class="luxury-header">
-<div class="header-bg-effect"></div>
-<h1 class="header-title">️ CloudSense</h1>
-<p class="header-subtitle">
-<span class="status-dot"></span>
- Intelligent Cloud Cost &amp; Infrastructure Management
-</p>
-</header>
+    <!-- Header -->
+    <header class="luxury-header">
+      <div class="header-bg-effect"></div>
+      <h1 class="header-title">CloudSense</h1>
+      <p class="header-subtitle">
+        <span class="status-dot"></span>
+        Intelligent Cloud Cost &amp; Infrastructure Management
+      </p>
+    </header>
 
-<!-- Metric Cards -->
-<section class="metrics-grid" id="metricsGrid">
-<div class="metric-card clickable" id="cardRunning" data-index="0">
-<span class="metric-label">Active Instances</span>
-<span class="metric-value" id="metricRunning">40</span>
-<span class="metric-delta" id="metricRunningDelta"></span>
-</div>
-<div class="metric-card clickable" id="cardRequired" data-index="1">
-<span class="metric-label">Recommended Shutdown</span>
-<span class="metric-value" id="metricRequired">--</span>
-<span class="metric-delta negative" id="metricRequiredDelta"></span>
-</div>
-<div class="metric-card clickable" id="cardCost" data-index="2">
-<span class="metric-label">Current Monthly Cost</span>
-<span class="metric-value" id="metricCost">$--</span>
-<span class="metric-delta" id="metricCostDelta">Across all regions</span>
-</div>
-<div class="metric-card clickable" id="cardSavings" data-index="3">
-<span class="metric-label">Potential Savings</span>
-<span class="metric-value" id="metricSavings">$--</span>
-<span class="metric-delta positive" id="metricSavingsDelta"></span>
-</div>
-</section>
+    <!-- Metric Cards -->
+    <section class="metrics-grid" id="metricsGrid">
+      <div class="metric-card clickable" id="cardRunning" data-index="0">
+        <span class="metric-label">Active Instances</span>
+        <span class="metric-value" id="metricRunning">40</span>
+        <span class="metric-delta" id="metricRunningDelta"></span>
+      </div>
+      <div class="metric-card clickable" id="cardRequired" data-index="1">
+        <span class="metric-label">Recommended Shutdown</span>
+        <span class="metric-value" id="metricRequired">--</span>
+        <span class="metric-delta negative" id="metricRequiredDelta"></span>
+      </div>
+      <div class="metric-card clickable" id="cardCost" data-index="2">
+        <span class="metric-label">Current Monthly Cost</span>
+        <span class="metric-value" id="metricCost">$--</span>
+        <span class="metric-delta" id="metricCostDelta">Across all regions</span>
+      </div>
+      <div class="metric-card clickable" id="cardSavings" data-index="3">
+        <span class="metric-label">Potential Savings</span>
+        <span class="metric-value" id="metricSavings">$--</span>
+        <span class="metric-delta positive" id="metricSavingsDelta"></span>
+      </div>
+    </section>
 
-<!-- Charts Row 1 -->
-<section class="charts-row">
-<div class="glass-card chart-card-wide">
-<h3 class="section-title"> Average Team CPU Utilization</h3>
-<div class="chart-wrapper">
-<canvas id="teamBarChart"></canvas>
-</div>
-</div>
-<div class="glass-card chart-card-narrow">
-<h3 class="section-title"> Efficiency & Optimization Controls</h3>
-<div class="gauge-container" id="gaugeContainer">
-<div class="gauge-ring" id="gaugeRing">
-<svg viewBox="0 0 200 200" class="gauge-svg">
-<circle class="gauge-bg-circle" cx="100" cy="100" r="85" />
-<circle class="gauge-progress-circle" id="gaugeProgress" cx="100" cy="100" r="85" />
-</svg>
-<div class="gauge-center">
-<span class="gauge-value" id="gaugeValue">58.3</span>
-<span class="gauge-unit">%</span>
-<span class="gauge-label">Efficiency</span>
-</div>
-</div>
-<div class="gauge-legend">
-<span class="gauge-legend-item"><span class="legend-dot danger"></span>0-50%</span>
-<span class="gauge-legend-item"><span class="legend-dot warning"></span>50-80%</span>
-<span class="gauge-legend-item"><span class="legend-dot success"></span>80-100%</span>
-</div>
-</div>
-<div style="display:flex; flex-direction:column; gap:16px;">
-<button class="action-btn optimize-btn" id="optimizeBtn">
-<span class="btn-icon"></span>
- Auto-Optimize Infrastructure
-</button>
- 
-<div style="display:flex; align-items:center; justify-content:space-between; padding:16px; background:var(--bg-input); border:1px solid var(--border); border-radius:12px;">
-<div style="display:flex; flex-direction:column;">
-<span style="font-weight:700; color:var(--text-primary); font-size:0.95rem;"> Autonomous Auto-Pilot</span>
-<span style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">Silently suspend idle servers.</span>
-</div>
- 
-<label class="switch" style="position:relative; display:inline-block; width:44px; height:24px;">
-<input type="checkbox" id="autopilotToggle" style="opacity:0; width:0; height:0;">
-<span class="slider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:var(--border); border-radius:24px; transition:.4s;"></span>
-<style>
- .switch input:checked + .slider { background-color: var(--success); }
- .switch input:checked + .slider:before { transform: translateX(20px); }
- .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; border-radius: 50%; transition: .4s; }
-</style>
-</label>
-</div>
-</div>
-</div>
-</section>
+    <!-- Charts Row 1 -->
+    <section class="charts-row">
+      <div class="glass-card chart-card-wide">
+        <h3 class="section-title">Average Team CPU Utilization</h3>
+        <div class="chart-wrapper">
+          <canvas id="teamBarChart"></canvas>
+        </div>
+      </div>
+      <div class="glass-card chart-card-narrow">
+        <h3 class="section-title">Efficiency & Optimization Controls</h3>
+        <div class="gauge-container" id="gaugeContainer">
+          <div class="gauge-ring" id="gaugeRing">
+            <svg viewBox="0 0 200 200" class="gauge-svg">
+              <circle class="gauge-bg-circle" cx="100" cy="100" r="85" />
+              <circle class="gauge-progress-circle" id="gaugeProgress" cx="100" cy="100" r="85" />
+            </svg>
+            <div class="gauge-center">
+              <span class="gauge-value" id="gaugeValue">58.3</span>
+              <span class="gauge-unit">%</span>
+              <span class="gauge-label">Efficiency</span>
+            </div>
+          </div>
+          <div class="gauge-legend">
+            <span class="gauge-legend-item"><span class="legend-dot danger"></span>0-50%</span>
+            <span class="gauge-legend-item"><span class="legend-dot warning"></span>50-80%</span>
+            <span class="gauge-legend-item"><span class="legend-dot success"></span>80-100%</span>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <button class="action-btn optimize-btn" id="optimizeBtn">
+            <span class="btn-icon">✨</span>
+            Auto-Optimize Infrastructure
+          </button>
+          
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; background:var(--bg-input); border:1px solid var(--border); border-radius:12px;">
+            <div style="display:flex; flex-direction:column;">
+              <span style="font-weight:700; color:var(--text-primary); font-size:0.95rem;">🤖 Autonomous Auto-Pilot</span>
+              <span style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">Silently suspend idle servers.</span>
+            </div>
+            
+            <label class="switch" style="position:relative; display:inline-block; width:44px; height:24px;">
+              <input type="checkbox" id="autopilotToggle" style="opacity:0; width:0; height:0;">
+              <span class="slider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:var(--border); border-radius:24px; transition:.4s;"></span>
+              <style>
+                .switch input:checked + .slider { background-color: var(--success); }
+                .switch input:checked + .slider:before { transform: translateX(20px); }
+                .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; border-radius: 50%; transition: .4s; }
+              </style>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- Charts Row 2 -->
-<section class="charts-row">
-<div class="glass-card chart-card-half">
-<h3 class="section-title"> Employee CPU Distribution by Team</h3>
-<div class="chart-wrapper">
-<canvas id="heatmapChart"></canvas>
-</div>
-</div>
-<div class="glass-card chart-card-half">
-<h3 class="section-title"> Cost Savings Forecast</h3>
-<div class="chart-wrapper">
-<canvas id="forecastChart"></canvas>
-</div>
-</div>
-</section>
+    <!-- Charts Row 2 -->
+    <section class="charts-row">
+      <div class="glass-card chart-card-half">
+        <h3 class="section-title">Employee CPU Distribution by Team</h3>
+        <div class="chart-wrapper">
+          <canvas id="heatmapChart"></canvas>
+        </div>
+      </div>
+      <div class="glass-card chart-card-half">
+        <h3 class="section-title">Cost Savings Forecast</h3>
+        <div class="chart-wrapper">
+          <canvas id="forecastChart"></canvas>
+        </div>
+      </div>
+    </section>
 
-<!-- Management Panel -->
-<section class="glass-card management-panel">
-<h3 class="section-title">️ Resource Control Center</h3>
+    <!-- Management Panel -->
+    <section class="glass-card management-panel">
+      <h3 class="section-title">Resource Control Center</h3>
 
-<div class="tabs-container">
-<div class="tabs-header">
-<button class="tab-btn active" data-tab="teams"> Team View</button>
-<button class="tab-btn" data-tab="employees"> Employee Controls</button>
-</div>
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="teams">🏢 Team View</button>
+          <button class="tab-btn" data-tab="employees">👥 Employee Controls</button>
+        </div>
 
-<div class="tab-content active" id="tab-teams">
-<div class="teams-grid" id="teamsGrid">
-<!-- Team cards rendered by JS -->
-</div>
-</div>
+        <div class="tab-content active" id="tab-teams">
+          <div class="teams-grid" id="teamsGrid">
+            <!-- Team cards rendered by JS -->
+          </div>
+        </div>
 
-<div class="tab-content" id="tab-employees">
-<div id="recommendationsBanner" class="recommendations-banner" style="display:none;"></div>
-<div class="employees-list" id="employeesList">
-<!-- Employee rows rendered by JS -->
-</div>
-</div>
-</div>
-</section>
+        <div class="tab-content" id="tab-employees">
+          <div id="recommendationsBanner" class="recommendations-banner" style="display:none;"></div>
+          <div class="employees-list" id="employeesList">
+            <!-- Employee rows rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- Footer -->
-<footer class="footer">
- © 2026 CloudSense 
-</footer>
-</main>
+    <!-- Footer -->
+    <footer class="footer">
+      ✦ © 2026 CloudSense ✦
+    </footer>
+  </main>
 
-<!-- Metric Detail Modal -->
-<div class="modal-backdrop" id="metricModalBackdrop"></div>
-<div class="modal" id="metricModal">
-<div class="modal-header">
-<h3 id="metricModalTitle">Details</h3>
-<button class="modal-close" id="metricModalClose"></button>
-</div>
-<div class="modal-body" id="metricModalBody">
-<!-- Table populated by JS -->
-</div>
-</div>
+  <!-- Metric Detail Modal -->
+  <div class="modal-backdrop" id="metricModalBackdrop"></div>
+  <div class="modal" id="metricModal">
+    <div class="modal-header">
+      <h3 id="metricModalTitle">Details</h3>
+      <button class="modal-close" id="metricModalClose">✕</button>
+    </div>
+    <div class="modal-body" id="metricModalBody">
+      <!-- Table populated by JS -->
+    </div>
+  </div>
 
-<script type="module" src="/src/main.js"></script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>
