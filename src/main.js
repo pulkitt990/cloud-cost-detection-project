@@ -809,6 +809,15 @@ function startDashboard() {
     });
   }
 
+  // Admin Sign Out
+  const adminSignoutBtn = document.getElementById('adminSignoutBtn');
+  if (adminSignoutBtn) {
+    adminSignoutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = '/login.html';
+    });
+  }
+
   // Right panel open / close
   const panelOpenBtn  = document.getElementById('panelOpenBtn');
   const panelCloseBtn = document.getElementById('panelCloseBtn');
